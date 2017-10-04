@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Tetris
 {
 
-    public class BlockRender
+    public class BlockRender : Game
     {
         GraphicsDeviceManager graphics;
         //Camera
@@ -98,29 +98,21 @@ namespace Tetris
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        public void DrawCube(int x, int y)
         {
-
-
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-
-
 
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
-                    effect.AmbientLightColor = new Vector3(-10f, 20, 0);
+                    effect.AmbientLightColor = new Vector3( 10 * x, 10 * y, 0);
                     effect.View = viewMatrix;
                     effect.World = worldMatrix;
                     effect.Projection = projectionMatrix;
                 }
                 mesh.Draw();
 
-
-                base.Draw(gameTime);
             }
         }
     }
