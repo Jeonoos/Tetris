@@ -17,7 +17,9 @@ namespace Tetris
         Model model;
         bool orbit = false;
 
-
+        public BlockRender() {
+            LoadContent();
+        }
 
         protected override void Initialize()
         {
