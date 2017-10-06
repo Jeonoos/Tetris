@@ -56,6 +56,11 @@ namespace Tetris
         protected override void Update(GameTime gameTime) {
             oldkstate = kstate;
             kstate = Keyboard.GetState();
+            fallingBlock.pos.y -= 1;
+            if (fallingBlock.pos.y == -18)
+            {
+                fallingBlock.pos.y += 1;
+            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             { 
                 Exit();
@@ -165,7 +170,7 @@ namespace Tetris
             }
             //shape = new bool[3, 3];
             //pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
-            pos = new GridPos(0, 0);
+             pos =  new GridPos(-1, 18);
 
             /*for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++)
