@@ -11,7 +11,7 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        bool EndFall = false;
         public static BlockRender blockRender;
         TetrisBlock fallingBlock;
         public static Model model;
@@ -53,47 +53,61 @@ namespace Tetris
         KeyboardState kstate = Keyboard.GetState();
         KeyboardState oldkstate;
 
-        protected override void Update(GameTime gameTime) {
+        protected override void Update(GameTime gameTime)
+        {
             oldkstate = kstate;
             kstate = Keyboard.GetState();
             fallingBlock.pos.y -= 1;
+
             if (fallingBlock.pos.y == -18)
             {
+                EndFall = true;
                 fallingBlock.pos.y += 1;
+
             }
+            else EndFall = false;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            { 
+            {
                 Exit();
-        }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-
-                blockRender.camPosition.X = -10;
-                fallingBlock.pos.x += 1; 
-
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-
-                blockRender.camPosition.X = 10;
-                fallingBlock.pos.x -= 1;
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
-            {
-                fallingBlock.Rotate();
-                
-              
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down) && !oldkstate.IsKeyDown(Keys.Down))
-            {
-                fallingBlock = new TetrisBlock(Color.Green);
-            }
-            else
-            {
-                blockRender.camPosition.X = 0;
             }
 
-            base.Update(gameTime);
+            if (EndFall == false)
+            {
+
+
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+
+                    blockRender.camPosition.X = -10;
+                    fallingBlock.pos.x += 1;
+
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+
+                    blockRender.camPosition.X = 10;
+                    fallingBlock.pos.x -= 1;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
+                {
+                    fallingBlock.Rotate();
+
+
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Down) && !oldkstate.IsKeyDown(Keys.Down))
+                {
+                    fallingBlock = new TetrisBlock(Color.Green);
+                }
+                else
+                {
+                    blockRender.camPosition.X = 0;
+                }
+
+                base.Update(gameTime);
+
+
+            }
         }
 
         protected override void Draw(GameTime gameTime) {
