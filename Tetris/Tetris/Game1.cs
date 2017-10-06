@@ -11,6 +11,7 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
         public static BlockRender blockRender;
         TetrisBlock fallingBlock;
         public static Model model;
@@ -32,7 +33,7 @@ namespace Tetris
             {
                 for (int y = 0; y < playingfield.grid.GetLength(1); y++)
                 {
-                    playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
+                    playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.Orange);
                 }
             }
             fallingBlock = new TetrisBlock(Color.Green);
@@ -54,8 +55,32 @@ namespace Tetris
 
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            { 
                 Exit();
-            
+        }
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+
+                blockRender.camPosition.X = -10;
+                fallingBlock.pos.x += 1; 
+
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+
+                blockRender.camPosition.X = 10;
+                fallingBlock.pos.x -= 1;
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {   
+              
+                
+              
+            }
+            else
+            {
+                blockRender.camPosition.X = 0;
+            }
 
             base.Update(gameTime);
         }
@@ -118,7 +143,7 @@ namespace Tetris
     class TetrisBlock {
         bool[,] shape;
         Color color;
-        GridPos pos;
+        public GridPos pos;
         public TetrisBlock(Color color){
             this.color = color;
             switch (Game1.random.Next(0, 1)) {

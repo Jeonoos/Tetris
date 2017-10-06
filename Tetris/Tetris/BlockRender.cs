@@ -10,7 +10,7 @@ namespace Tetris
         GraphicsDeviceManager graphics;
         //Camera
         Vector3 camTarget;
-        Vector3 camPosition;
+        public Vector3 camPosition;
         Matrix projectionMatrix;
         Matrix viewMatrix;
         Matrix worldMatrix;
@@ -29,7 +29,7 @@ namespace Tetris
         }
 
 
-        protected void SetupCamera()
+        public void SetupCamera()
         {
 
             //Setup Camera
@@ -102,6 +102,7 @@ namespace Tetris
 
         public void DrawCube(Model model, int x, int y, Color color)
         {
+            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));
             Vector3 modelPosition = new Vector3(x,y,0);
             foreach (ModelMesh mesh in model.Meshes)
             {
