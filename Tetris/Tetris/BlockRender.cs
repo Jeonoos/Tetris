@@ -102,7 +102,7 @@ namespace Tetris
 
         public void DrawCube(Model model, int x, int y, Color color)
         {
-            Vector3 modelPosition = new Vector3(x * 2f,y * 2f,0);
+            Vector3 modelPosition = new Vector3(x,y,0);
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)

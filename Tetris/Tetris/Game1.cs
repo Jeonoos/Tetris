@@ -11,8 +11,8 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        BlockRender blockRender;
-
+        public static BlockRender blockRender;
+        TetrisBlock fallingBlock;
         Model model;
         public static Playingfield playingfield;
         public Game1() {
@@ -36,7 +36,7 @@ namespace Tetris
                 }
             }
             playingfield.GetCube(new GridPos(5,5)).cubeType = Cube.CubeType.Solid;
-            playingfield.GetCube(new GridPos(4c, 5)).cubeType = Cube.CubeType.Solid;
+            playingfield.GetCube(new GridPos(4, 5)).cubeType = Cube.CubeType.Solid;
             playingfield.GetCube(new GridPos(2, 5)).cubeType = Cube.CubeType.Solid;
         }
   
@@ -115,8 +115,10 @@ namespace Tetris
 
     class TetrisBlock {
         bool[,] shape;
+        Color color;
         GridPos pos;
-        public TetrisBlock(){
+        public TetrisBlock(Color color){
+            this.color = color;
             shape = new bool[3, 3];
             pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
 
@@ -127,7 +129,15 @@ namespace Tetris
                 }
             }
         }
-
+        public void DrawShape() {
+            for (int x = 0; x < shape.GetLength(0); x++){
+                for (int y = 0; y < shape.GetLength(1); y++) {
+                    if (shape[x, y]) {
+                        //Game1.blockRender.DrawCube(,);
+                    }
+                }
+            }
+        }
 
     }
 }
