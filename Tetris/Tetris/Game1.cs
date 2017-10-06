@@ -37,9 +37,6 @@ namespace Tetris
                 }
             }
             fallingBlock = new TetrisBlock(Color.Green);
-            playingfield.GetCube(new GridPos(5,5)).cubeType = Cube.CubeType.Solid;
-            playingfield.GetCube(new GridPos(4, 5)).cubeType = Cube.CubeType.Solid;
-            playingfield.GetCube(new GridPos(2, 5)).cubeType = Cube.CubeType.Solid;
         }
   
         protected override void LoadContent() {
@@ -53,7 +50,12 @@ namespace Tetris
             
         }
 
+        KeyboardState kstate = Keyboard.GetState();
+        KeyboardState oldkstate;
+
         protected override void Update(GameTime gameTime) {
+            oldkstate = kstate;
+            kstate = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             { 
                 Exit();
@@ -71,11 +73,15 @@ namespace Tetris
                 blockRender.camPosition.X = 10;
                 fallingBlock.pos.x -= 1;
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {   
-              
+            else if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
+            {
+                fallingBlock.Rotate();
                 
               
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.Down) && !oldkstate.IsKeyDown(Keys.Down))
+            {
+                fallingBlock = new TetrisBlock(Color.Green);
             }
             else
             {
@@ -142,18 +148,24 @@ namespace Tetris
 
     class TetrisBlock {
         bool[,] shape;
+        GridPos origin;
         Color color;
         public GridPos pos;
         public TetrisBlock(Color color){
             this.color = color;
-            switch (Game1.random.Next(0, 1)) {
-                case 0: shape = new bool[,] {{ true},{ true},{ true},{ true}}; break;
+            switch (Game1.random.Next(0, 7)) {
+                case 0: shape = new bool[,] { { false, true, true },{false, true, false},{false, true, false} }; break;
+                case 1: shape = new bool[,] { { true, true, false }, { false, true, false }, { false, true, false } }; break;
+                case 2: shape = new bool[,] { { false, true, false }, { true, true, false }, { true, false, false } }; break;
+                case 3: shape = new bool[,] { { false, true, false }, { false, true, true }, { false, false, true } }; break;
+                case 4: shape = new bool[,] { { false, true,false,false }, { false, true,false,false }, { false, true,false,false }, { false,true,false,false} }; break;
+                case 5: shape = new bool[,] { { false, true, false}, { true, true, true}, { false, false, false}}; break;
+
                 default: shape = new bool[,] { { true, true }, { true, true } };break;
-
-
             }
             //shape = new bool[3, 3];
-            pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
+            //pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
+            pos = new GridPos(0, 0);
 
             /*for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++)
@@ -172,5 +184,27 @@ namespace Tetris
             }
         }
 
+        public void Rotate() {
+
+            bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
+                {
+                    temp[x, y] = shape[-x + shape.GetLength(0)-1, y];
+                }
+            }
+            shape = temp;
+            temp = new bool[shape.GetLength(1), shape.GetLength(0)];
+
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
+                {
+                    temp[y, x] = shape[x, y];
+                }
+            }
+            shape = temp;
+        }
     }
 }
