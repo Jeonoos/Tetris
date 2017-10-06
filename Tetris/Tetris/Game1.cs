@@ -11,6 +11,7 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D backgr;
         bool EndFall = false;
         public static BlockRender blockRender;
         TetrisBlock fallingBlock;
@@ -40,7 +41,7 @@ namespace Tetris
         }
   
         protected override void LoadContent() {
-
+            backgr = Content.Load <Texture2D>("background");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
         }
@@ -66,13 +67,29 @@ namespace Tetris
 
             }
             else EndFall = false;
+           
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
             }
 
-            if (EndFall == false)
+            if (EndFall == true)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+
+                    blockRender.camPosition.X = -10;
+                }
+                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+
+                    blockRender.camPosition.X = 10;
+                }
+                else blockRender.camPosition.X = 0;
+            }
+
+                if (EndFall == false)
             {
 
 
@@ -81,6 +98,10 @@ namespace Tetris
 
                     blockRender.camPosition.X = -10;
                     fallingBlock.pos.x += 1;
+                        if (fallingBlock.pos.x == 8)
+                    {
+                        fallingBlock.pos.x -= 1;
+                    }
 
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Left))
@@ -88,6 +109,10 @@ namespace Tetris
 
                     blockRender.camPosition.X = 10;
                     fallingBlock.pos.x -= 1;
+                    if (fallingBlock.pos.x == -8)
+                    {
+                        fallingBlock.pos.x += 1;
+                    }
                 }
                 else if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
                 {
@@ -112,6 +137,9 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            
+            
+           
             for (int x = 0; x < playingfield.grid.GetLength(0); x++)
             {
                 for (int y = 0; y < playingfield.grid.GetLength(1); y++)
