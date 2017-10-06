@@ -13,7 +13,7 @@ namespace Tetris
         SpriteBatch spriteBatch;
         public static BlockRender blockRender;
         TetrisBlock fallingBlock;
-        Model model;
+        public static Model model;
         public static Playingfield playingfield;
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
@@ -35,6 +35,7 @@ namespace Tetris
                     playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
                 }
             }
+            fallingBlock = new TetrisBlock(Color.Green);
             playingfield.GetCube(new GridPos(5,5)).cubeType = Cube.CubeType.Solid;
             playingfield.GetCube(new GridPos(4, 5)).cubeType = Cube.CubeType.Solid;
             playingfield.GetCube(new GridPos(2, 5)).cubeType = Cube.CubeType.Solid;
@@ -54,7 +55,7 @@ namespace Tetris
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
 
             base.Update(gameTime);
         }
@@ -70,6 +71,7 @@ namespace Tetris
                         blockRender.DrawCube(model, x, y, curCube.color);
                 }
             }
+            fallingBlock.DrawShape();
             base.Draw(gameTime);
         }
     }
@@ -119,21 +121,27 @@ namespace Tetris
         GridPos pos;
         public TetrisBlock(Color color){
             this.color = color;
-            shape = new bool[3, 3];
+            switch (Game1.random.Next(0, 1)) {
+                case 0: shape = new bool[,] {{ true},{ true},{ true},{ true}}; break;
+                default: shape = new bool[,] { { true, true }, { true, true } };break;
+
+
+            }
+            //shape = new bool[3, 3];
             pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
 
-            for (int x = 0; x < shape.GetLength(0); x++){
+            /*for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++)
                 {
-                    shape[x, y] = Game1.random.Next() == 0;
+                    shape[x, y] = Game1.random.Next(0,2) == 0;
                 }
-            }
+            }*/
         }
         public void DrawShape() {
             for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++) {
                     if (shape[x, y]) {
-                        //Game1.blockRender.DrawCube(,);
+                        Game1.blockRender.DrawCube(Game1.model,x + pos.x,y + pos.y,color);
                     }
                 }
             }
