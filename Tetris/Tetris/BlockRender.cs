@@ -14,10 +14,12 @@ namespace Tetris
         Matrix projectionMatrix;
         Matrix viewMatrix;
         Matrix worldMatrix;
-        Model model;
         bool orbit = false;
 
-
+        public BlockRender(GraphicsDeviceManager graphics) {
+            this.graphics = graphics;
+            SetupCamera();
+        }
 
         protected override void Initialize()
         {
@@ -27,16 +29,16 @@ namespace Tetris
         }
 
 
-        protected override void LoadContent()
+        protected void SetupCamera()
         {
 
             //Setup Camera
             camTarget = new Vector3(0f, 0f, 0f);
-            camPosition = new Vector3(0f, -3f, -10f);
+            camPosition = new Vector3(0f, -5f, 50f);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), graphics.GraphicsDevice.Viewport.AspectRatio, 1f, 1000f);
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));// Y up
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
-            model = Content.Load<Model>("MonoCube");
+            
 
         }
 
@@ -98,17 +100,17 @@ namespace Tetris
             base.Update(gameTime);
         }
 
-        public void DrawCube(int x, int y)
+        public void DrawCube(Model model, int x, int y, Color color)
         {
-
+            Vector3 modelPosition = new Vector3(x * 2f,y * 2f,0);
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
-                    effect.AmbientLightColor = new Vector3( 10 * x, 10 * y, 0);
+                    effect.AmbientLightColor = new Vector3( color.R/255,color.G/255,color.B/255);
                     effect.View = viewMatrix;
-                    effect.World = worldMatrix;
+                    effect.World = Matrix.CreateTranslation(modelPosition);
                     effect.Projection = projectionMatrix;
                 }
                 mesh.Draw();

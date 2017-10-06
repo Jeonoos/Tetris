@@ -11,22 +11,39 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+        BlockRender blockRender;
+
+        Model model;
         public static Playingfield playingfield;
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            //graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = 720;
+            graphics.PreferredBackBufferHeight = 1080;
         }
 
         protected override void Initialize() {
             base.Initialize();
-            playingfield = new Playingfield(12,20);
+            playingfield = new Playingfield(12, 20);
             random = new Random();
+            for (int x = 0; x < playingfield.grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < playingfield.grid.GetLength(1); y++)
+                {
+                    playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
+                }
+            }
+            playingfield.GetCube(new GridPos(5,5)).cubeType = Cube.CubeType.Solid;
+            playingfield.GetCube(new GridPos(4c, 5)).cubeType = Cube.CubeType.Solid;
+            playingfield.GetCube(new GridPos(2, 5)).cubeType = Cube.CubeType.Solid;
         }
-
   
         protected override void LoadContent() {
-       
+
+            blockRender = new BlockRender(graphics);
+            model = Content.Load<Model>("monocube");
         }
 
       
@@ -44,13 +61,21 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
+            for (int x = 0; x < playingfield.grid.GetLength(0); x++)
+            {
+                for (int y = 0; y < playingfield.grid.GetLength(1); y++)
+                {
+                    Cube curCube = playingfield.GetCube(new GridPos(x, y));
+                    if (curCube.cubeType != Cube.CubeType.Empty)
+                        blockRender.DrawCube(model, x, y, curCube.color);
+                }
+            }
             base.Draw(gameTime);
         }
     }
     public class Playingfield {
         public int xSize, ySize;
-        private Cube[,] grid;
+        public Cube[,] grid;
 
         public Playingfield(int xSize, int ySize) {
             this.xSize = xSize;
@@ -62,23 +87,29 @@ namespace Tetris
             return (GetCube(pos).cubeType == Cube.CubeType.Empty);
         }
 
-        Cube GetCube(GridPos pos) {
+        public Cube GetCube(GridPos pos) {
             return grid[pos.x, pos.y];
         }
     }
-    struct GridPos {
+    public struct GridPos {
         public int x, y;
-        public GridPos(int x, int y) {
+        public GridPos(int x, int y){
             this.x = x;
             this.y = y;
         }
     }
 
-    class Cube {
+    public class Cube {
+        public Color color = Color.White;
+        public CubeType cubeType;
+        public Cube(CubeType cubeType, Color color) {
+            this.color = color;
+            this.cubeType = cubeType;
+        }
+
         public enum CubeType {
             Empty, Solid
         }
-        public CubeType cubeType = CubeType.Empty;
 
     }
 
