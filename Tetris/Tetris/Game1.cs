@@ -41,7 +41,7 @@ namespace Tetris
         }
   
         protected override void LoadContent() {
-            backgr = Content.Load <Texture2D>("background");
+           // backgr = Content.Load <Texture2D>("background");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
         }
