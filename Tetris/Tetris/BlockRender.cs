@@ -15,7 +15,7 @@ namespace Tetris
         Matrix viewMatrix;
         Matrix worldMatrix;
         bool orbit = false;
-
+        public float camOffsetX = 0;
         public BlockRender(GraphicsDeviceManager graphics) {
             this.graphics = graphics;
             SetupCamera();
@@ -102,7 +102,7 @@ namespace Tetris
 
         public void DrawCube(Model model, int x, int y, Color color)
         {
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));
+            viewMatrix = Matrix.CreateLookAt(camPosition + Vector3.Right * camOffsetX, camTarget, new Vector3(0f, 1f, 0f));
             Vector3 modelPosition = new Vector3(x * 2f,y * 2f, 0);
             foreach (ModelMesh mesh in model.Meshes)
             {

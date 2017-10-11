@@ -19,6 +19,7 @@ namespace Tetris
         public static Playingfield playingfield;
         public float falltimer = 0;
         public float inputtimer = 0;
+        float shakeTimer;
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -67,6 +68,7 @@ namespace Tetris
             {
                 if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1))) {
                     fallingBlock.Solidify();
+                    shakeTimer = 500;
                     fallingBlock = new TetrisBlock();
                 }
                 else
@@ -119,6 +121,7 @@ namespace Tetris
                     {
                         if (oldkstate.IsKeyDown(Keys.Right))
                         {
+                            blockRender.camOffsetX = 5;
                             inputtimer += gameTime.ElapsedGameTime.Milliseconds;
                             if (inputtimer > 150)
                             {
@@ -146,6 +149,7 @@ namespace Tetris
                     {
                         if (oldkstate.IsKeyDown(Keys.Left))
                         {
+                            blockRender.camOffsetX = -5;
                             inputtimer += gameTime.ElapsedGameTime.Milliseconds;
                             if (inputtimer > 150)
                             {
@@ -169,6 +173,9 @@ namespace Tetris
                     inputtimer = 0;
                 }
 
+                if (!kstate.IsKeyDown(Keys.Right) && !kstate.IsKeyDown(Keys.Left))
+                    blockRender.camOffsetX = 0;
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
                 {
                     fallingBlock.Rotate();
@@ -184,6 +191,10 @@ namespace Tetris
                     //blockRender.camPosition.X = 0;
                 }
 
+                blockRender.camOffsetX = (float)Math.Sin(shakeTimer / 50 * Math.PI) * shakeTimer / 100;
+                if (shakeTimer > 0)
+                    shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
                 base.Update(gameTime);
 
 
@@ -192,9 +203,11 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            
-           
+
+
+            for (int x = 1; x < playingfield.grid.GetLength(0); x++) {
+                blockRender.DrawCube(model, x, 0, Color.Black);
+            }
             for (int x = 0; x < playingfield.grid.GetLength(0); x++)
             {
                 for (int y = 0; y < playingfield.grid.GetLength(1); y++)
@@ -202,6 +215,7 @@ namespace Tetris
                     Cube curCube = playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
                         blockRender.DrawCube(model, x, y, curCube.color);
+
                 }
             }
             fallingBlock.DrawShape();
@@ -340,7 +354,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        while (pos.x + x >= Game1.playingfield.xSize)
+                        while (CheckCollision(pos))
                             pos.x -= 1;
                         while (pos.x + x <= 0)
                             pos.x += 1;
