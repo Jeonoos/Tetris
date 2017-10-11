@@ -20,6 +20,9 @@ namespace Tetris
         public float falltimer = 0;
         public float inputtimer = 0;
         float shakeTimer;
+        public static GameState gamestate = GameState.Game;
+        public enum GameState { Game, GameOver}
+
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -58,77 +61,71 @@ namespace Tetris
 
         KeyboardState kstate = Keyboard.GetState();
         KeyboardState oldkstate;
-
-        protected override void Update(GameTime gameTime)
-        {
+        float Xbalance = 0;
+        float Ybalance = 0;
+        bool BreakFalling = false;
+        double gameTimer = 0;
+        protected override void Update(GameTime gameTime) {
             falltimer += gameTime.ElapsedGameTime.Milliseconds;
+            gameTimer += gameTime.ElapsedGameTime.Milliseconds;
             oldkstate = kstate;
             kstate = Keyboard.GetState();
-            if (falltimer > 200)
+            if (gamestate == GameState.GameOver)
             {
-                if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1))) {
-                    fallingBlock.Solidify();
-                    shakeTimer = 500;
-                    fallingBlock = new TetrisBlock();
-                }
-                else
+                blockRender.camOffset = Vector2.Zero;
+                blockRender.camPosition = new Vector3((float)Math.Sin(gameTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameTimer / 1000) * 75 + blockRender.camTarget.Z);
+            }
+            else
+            {
+
+                if (falltimer > 200)
                 {
-                    fallingBlock.pos.y -= 1;
-                    falltimer = 0;
+                    if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
+                    {
+                        fallingBlock.Solidify();
+                        playingfield.CheckForRow();
+                        if (kstate.IsKeyDown(Keys.Down))
+                        {
+                            shakeTimer = 300;
+                            BreakFalling = true;
+                        }
+                        fallingBlock = new TetrisBlock();
+                    }
+                    else
+                    {
+                        fallingBlock.pos.y -= 1;
+                        falltimer = 0;
+                    }
                 }
-            }
 
-            /*if (fallingBlock.pos.y == -18)
-            {
-                EndFall = true;
-                fallingBlock.pos.y += 1;
+                /*if (fallingBlock.pos.y == -18)
+                {
+                    EndFall = true;
+                    fallingBlock.pos.y += 1;
 
-            }
-            else EndFall = false;*/
-           
+                }
+                else EndFall = false;*/
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
 
-            if (EndFall == true)
-            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                {
+                    Exit();
+                }
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 {
-
-                    //blockRender.camPosition.X = -10;
-                }
-                else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                {
-
-                    //blockRender.camPosition.X = 10;
-                }
-                else
-                {
-                    //blockRender.camPosition.X = 0;
-                }
-            }
-
-                if (EndFall == false)
-            {
-
-
-                if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
-
+                    Xbalance += gameTime.ElapsedGameTime.Milliseconds;
                     if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x + 1, fallingBlock.pos.y)))
                     {
                         if (oldkstate.IsKeyDown(Keys.Right))
                         {
-                            blockRender.camOffsetX = 5;
                             inputtimer += gameTime.ElapsedGameTime.Milliseconds;
                             if (inputtimer > 150)
                             {
                                 fallingBlock.pos.x += 1;
                                 inputtimer = 100;
                             }
-                        }else
+                        }
+                        else
                             fallingBlock.pos.x += 1;
                     }
                     /*blockRender.camPosition.X = -10;
@@ -138,18 +135,20 @@ namespace Tetris
                         fallingBlock.pos.x -= 1;
                     }*/
 
-                }else if (oldkstate.IsKeyDown(Keys.Right))
+                }
+                else if (oldkstate.IsKeyDown(Keys.Right))
                 {
                     inputtimer = 0;
                 }
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 {
+                    Xbalance -= gameTime.ElapsedGameTime.Milliseconds;
 
                     if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x - 1, fallingBlock.pos.y)))
                     {
                         if (oldkstate.IsKeyDown(Keys.Left))
                         {
-                            blockRender.camOffsetX = -5;
                             inputtimer += gameTime.ElapsedGameTime.Milliseconds;
                             if (inputtimer > 150)
                             {
@@ -174,31 +173,43 @@ namespace Tetris
                 }
 
                 if (!kstate.IsKeyDown(Keys.Right) && !kstate.IsKeyDown(Keys.Left))
-                    blockRender.camOffsetX = 0;
-
+                {
+                    Xbalance += (Xbalance > 0) ? -gameTime.ElapsedGameTime.Milliseconds : gameTime.ElapsedGameTime.Milliseconds;
+                    if (Math.Abs(Xbalance) < gameTime.ElapsedGameTime.Milliseconds)
+                        Xbalance = 0;
+                }
                 if (Keyboard.GetState().IsKeyDown(Keys.Up) && !oldkstate.IsKeyDown(Keys.Up))
                 {
                     fallingBlock.Rotate();
 
 
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) && !BreakFalling)
                 {
                     falltimer = 200;
+                    Ybalance += gameTime.ElapsedGameTime.Milliseconds;
                 }
                 else
                 {
-                    //blockRender.camPosition.X = 0;
+                    if (Ybalance > 0)
+                        Ybalance -= gameTime.ElapsedGameTime.Milliseconds * 5;
                 }
+                if (BreakFalling && !kstate.IsKeyDown(Keys.Down))
+                    BreakFalling = false;
 
-                blockRender.camOffsetX = (float)Math.Sin(shakeTimer / 50 * Math.PI) * shakeTimer / 100;
+                Xbalance = MathHelper.Clamp(Xbalance, -200, 200);
+                Ybalance = MathHelper.Clamp(Ybalance, 0, 200);
+                blockRender.camOffset.X = -Xbalance / 20;
+                blockRender.camOffset.Y = Ybalance / 20;
+                blockRender.camOffset.X += (float)Math.Sin(shakeTimer / 60 * Math.PI) * shakeTimer / 20;
                 if (shakeTimer > 0)
                     shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
-
-                base.Update(gameTime);
-
-
             }
+            base.Update(gameTime);
+        }
+
+        public void GameOver() {
+
         }
 
         protected override void Draw(GameTime gameTime) {
@@ -240,6 +251,31 @@ namespace Tetris
 
         public Cube GetCube(GridPos pos) {
             return grid[pos.x, pos.y];
+        }
+
+        public void CheckForRow() {
+            for (int y = 0; y < ySize; y++)
+            {
+                bool completeRow = true;
+                for (int x = 1; x < xSize; x++)
+                {
+                    if (grid[x, y].cubeType == Cube.CubeType.Empty) {
+                        completeRow = false;
+                    }
+                }
+                if (completeRow) {
+                    for (int x = 0; x < xSize; x++){
+                        grid[x, y].cubeType = Cube.CubeType.Empty;
+                    }
+                    for (int d = y; d < ySize - 1; d++){
+                        for (int x = 0; x < xSize; x++){
+                            grid[x, d].cubeType = grid[x, d + 1].cubeType;
+                            grid[x, d].color = grid[x, d + 1].color;
+                        }
+                    }
+                    y -= 1;
+                }
+            }
         }
     }
     public struct GridPos {
@@ -283,7 +319,9 @@ namespace Tetris
             //shape = new bool[3, 3];
             //pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
              pos =  new GridPos(5, 22);
-
+            if (CheckCollision(pos)) {
+                Game1.gamestate = Game1.GameState.GameOver;
+            }
             /*for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++)
                 {
@@ -329,38 +367,41 @@ namespace Tetris
         }
 
         public void Rotate() {
-            bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
-            for (int x = 0; x < shape.GetLength(0); x++)
+           do
             {
-                for (int y = 0; y < shape.GetLength(1); y++)
+                bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
+                for (int x = 0; x < shape.GetLength(0); x++)
                 {
-                    temp[x, y] = shape[-x + shape.GetLength(0) - 1, y];
-                }
-            }
-            shape = temp;
-            temp = new bool[shape.GetLength(1), shape.GetLength(0)];
-
-            for (int x = 0; x < shape.GetLength(0); x++)
-            {
-                for (int y = 0; y < shape.GetLength(1); y++)
-                {
-                    temp[y, x] = shape[x, y];
-                }
-            }
-            shape = temp;
-            for (int x = 0; x < shape.GetLength(0); x++)
-            {
-                for (int y = 0; y < shape.GetLength(1); y++)
-                {
-                    if (shape[x, y])
+                    for (int y = 0; y < shape.GetLength(1); y++)
                     {
-                        while (CheckCollision(pos))
-                            pos.x -= 1;
-                        while (pos.x + x <= 0)
-                            pos.x += 1;
+                        temp[x, y] = shape[-x + shape.GetLength(0) - 1, y];
                     }
                 }
-            }
+                shape = temp;
+                temp = new bool[shape.GetLength(1), shape.GetLength(0)];
+
+                for (int x = 0; x < shape.GetLength(0); x++)
+                {
+                    for (int y = 0; y < shape.GetLength(1); y++)
+                    {
+                        temp[y, x] = shape[x, y];
+                    }
+                }
+                shape = temp;
+                for (int x = 0; x < shape.GetLength(0); x++)
+                {
+                    for (int y = 0; y < shape.GetLength(1); y++)
+                    {
+                        if (shape[x, y]) {
+                            while (x + pos.x >= Game1.playingfield.xSize)
+                                pos.x -= 1;
+                            while (x + pos.x <= 0)
+                                pos.x += 1;
+                        }
+                    }
+                }
+
+            } while (CheckCollision(pos));
         }
     }
 }
