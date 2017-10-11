@@ -11,7 +11,7 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D backgr;
+        Texture2D monotex;
         bool EndFall = false;
         public static BlockRender blockRender;
         TetrisBlock fallingBlock;
@@ -30,7 +30,7 @@ namespace Tetris
 
         protected override void Initialize() {
             base.Initialize();
-            playingfield = new Playingfield(20, 30);
+            playingfield = new Playingfield(10, 26);
             random = new Random();
             for (int x = 0; x < playingfield.grid.GetLength(0); x++)
             {
@@ -46,6 +46,8 @@ namespace Tetris
            // backgr = Content.Load <Texture2D>("background");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
+            monotex = Content.Load<Texture2D>("monotex");
+
         }
 
       
@@ -173,9 +175,9 @@ namespace Tetris
 
 
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) && !oldkstate.IsKeyDown(Keys.Down))
+                if (Keyboard.GetState().IsKeyDown(Keys.Down))
                 {
-                    fallingBlock = new TetrisBlock();
+                    falltimer = 200;
                 }
                 else
                 {
@@ -266,7 +268,7 @@ namespace Tetris
             }
             //shape = new bool[3, 3];
             //pos = new GridPos(Game1.random.Next(0,Game1.playingfield.xSize),0);
-             pos =  new GridPos(5, 18);
+             pos =  new GridPos(5, 22);
 
             /*for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++)
@@ -313,29 +315,38 @@ namespace Tetris
         }
 
         public void Rotate() {
-            do
+            bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
+            for (int x = 0; x < shape.GetLength(0); x++)
             {
-                bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
-                for (int x = 0; x < shape.GetLength(0); x++)
+                for (int y = 0; y < shape.GetLength(1); y++)
                 {
-                    for (int y = 0; y < shape.GetLength(1); y++)
-                    {
-                        temp[x, y] = shape[-x + shape.GetLength(0) - 1, y];
-                    }
+                    temp[x, y] = shape[-x + shape.GetLength(0) - 1, y];
                 }
-                shape = temp;
-                temp = new bool[shape.GetLength(1), shape.GetLength(0)];
+            }
+            shape = temp;
+            temp = new bool[shape.GetLength(1), shape.GetLength(0)];
 
-                for (int x = 0; x < shape.GetLength(0); x++)
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
                 {
-                    for (int y = 0; y < shape.GetLength(1); y++)
+                    temp[y, x] = shape[x, y];
+                }
+            }
+            shape = temp;
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
+                {
+                    if (shape[x, y])
                     {
-                        temp[y, x] = shape[x, y];
+                        while (pos.x + x >= Game1.playingfield.xSize)
+                            pos.x -= 1;
+                        while (pos.x + x <= 0)
+                            pos.x += 1;
                     }
                 }
-                shape = temp;
-            } while (CheckCollision(pos));
-            
+            }
         }
     }
 }
