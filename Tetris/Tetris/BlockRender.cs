@@ -33,8 +33,8 @@ namespace Tetris
         {
 
             //Setup Camera
-            camTarget = new Vector3(0f, 0f, 0f);
-            camPosition = new Vector3(0f, -5f, 100f);
+            camTarget = new Vector3(25f, 25f, 0f);
+            camPosition = new Vector3(25f, 0f, 100f);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), graphics.GraphicsDevice.Viewport.AspectRatio, 1f, 1000f);
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));// Y up
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
@@ -109,7 +109,7 @@ namespace Tetris
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
-                    effect.AmbientLightColor = new Vector3( color.R/255,color.G/255,color.B/255);
+                    effect.AmbientLightColor = new Vector3((float)color.R/255,(float)color.G/255,(float)color.B/255);
                     effect.View = viewMatrix;
                     effect.World = Matrix.CreateTranslation(modelPosition);
                     effect.Projection = projectionMatrix;
