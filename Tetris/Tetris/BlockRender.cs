@@ -33,8 +33,8 @@ namespace Tetris
         {
 
             //Setup Camera
-            camTarget = new Vector3(25f, 25f, 0f);
-            camPosition = new Vector3(25f, 0f, 100f);
+            camTarget = new Vector3(10f, 20f, 0f);
+            camPosition = new Vector3(10f, 20f, 70f);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), graphics.GraphicsDevice.Viewport.AspectRatio, 1f, 1000f);
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));// Y up
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
