@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace Tetris
@@ -8,6 +10,8 @@ namespace Tetris
 
     public class Game1 : Game
     {
+        Song TetrisSong;
+        SoundEffect Hit, Clear, GameOver;
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -51,7 +55,9 @@ namespace Tetris
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
             monotex = Content.Load<Texture2D>("monotex");
-
+            TetrisSong = Content.Load<Song>("Tetris");
+            MediaPlayer.Play(TetrisSong);
+            MediaPlayer.IsRepeating = true;
         }
 
       
@@ -66,10 +72,14 @@ namespace Tetris
         bool BreakFalling = false;
         double gameTimer = 0;
         protected override void Update(GameTime gameTime) {
+            
             falltimer += gameTime.ElapsedGameTime.Milliseconds;
             gameTimer += gameTime.ElapsedGameTime.Milliseconds;
             oldkstate = kstate;
             kstate = Keyboard.GetState();
+            
+
+
             if (gamestate == GameState.GameOver)
             {
                 blockRender.camOffset = Vector2.Zero;
@@ -77,6 +87,7 @@ namespace Tetris
             }
             else
             {
+                
 
                 if (falltimer > 200)
                 {
@@ -111,8 +122,9 @@ namespace Tetris
                 {
                     Exit();
                 }
+
                 if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                {
+                {   
                     Xbalance += gameTime.ElapsedGameTime.Milliseconds;
                     if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x + 1, fallingBlock.pos.y)))
                     {
@@ -205,16 +217,16 @@ namespace Tetris
                 if (shakeTimer > 0)
                     shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
             }
+
             base.Update(gameTime);
         }
 
-        public void GameOver() {
-
-        }
+       
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
+            
 
             for (int x = 1; x < playingfield.grid.GetLength(0); x++) {
                 blockRender.DrawCube(model, x, 0, Color.Black);
@@ -222,7 +234,7 @@ namespace Tetris
             for (int x = 0; x < playingfield.grid.GetLength(0); x++)
             {
                 for (int y = 0; y < playingfield.grid.GetLength(1); y++)
-                {
+                {   
                     Cube curCube = playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
                         blockRender.DrawCube(model, x, y, curCube.color);
@@ -230,7 +242,9 @@ namespace Tetris
                 }
             }
             fallingBlock.DrawShape();
+
             base.Draw(gameTime);
+
         }
     }
     public class Playingfield {

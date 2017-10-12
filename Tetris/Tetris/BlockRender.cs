@@ -8,7 +8,7 @@ namespace Tetris
     public class BlockRender : Game
     {
         GraphicsDeviceManager graphics;
-        //Camera
+       
         public Vector3 camTarget;
         public Vector3 camPosition;
         Matrix projectionMatrix;
@@ -42,7 +42,7 @@ namespace Tetris
 
         }
 
-
+      
         protected override void UnloadContent()
         {
 
@@ -108,11 +108,13 @@ namespace Tetris
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
+                    
                     effect.EnableDefaultLighting();
                     effect.AmbientLightColor = new Vector3((float)color.R/255,(float)color.G/255,(float)color.B/255);
                     effect.View = viewMatrix;
                     effect.World = Matrix.CreateTranslation(modelPosition);
                     effect.Projection = projectionMatrix;
+                    
                 }
                 mesh.Draw();
 

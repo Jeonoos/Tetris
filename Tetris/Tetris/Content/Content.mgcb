@@ -44,3 +44,9 @@
 /processorParam:TextureFormat=Color
 /build:monotex.png
 
+#begin Tetris.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Tetris.mp3
+
