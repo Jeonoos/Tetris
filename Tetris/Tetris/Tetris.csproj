@@ -39,9 +39,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BlockRender.cs" />
+    <Compile Include="Cube.cs" />
+    <Compile Include="GridPos.cs" />
+    <Compile Include="Playingfield.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Game1.cs" />
+    <Compile Include="PreviewTetrisBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TetrisBlock.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
