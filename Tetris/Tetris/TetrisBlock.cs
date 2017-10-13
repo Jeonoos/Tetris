@@ -40,8 +40,8 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.playingfield.grid[x + pos.x, y + pos.y].cubeType = Cube.CubeType.Solid;
-                        Game1.playingfield.grid[x + pos.x, y + pos.y].color = color;
+                        Playingfield.grid[x + pos.x, y + pos.y].cubeType = Cube.CubeType.Solid;
+                        Playingfield.grid[x + pos.x, y + pos.y].color = color;
                     }
                 }
             }
@@ -54,9 +54,9 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        if (pos.x + x >= Game1.playingfield.xSize || pos.x + x <= 0 || pos.y + y >= Game1.playingfield.ySize || pos.y + y <= 0)
+                        if (pos.x + x >= Playingfield.xSize || pos.x + x <= 0 || pos.y + y >= Playingfield.ySize || pos.y + y <= 0)
                             return true;
-                        if (Game1.playingfield.grid[x + pos.x, y + pos.y].cubeType != Cube.CubeType.Empty)
+                        if (Playingfield.grid[x + pos.x, y + pos.y].cubeType != Cube.CubeType.Empty)
                             return true;
                     }
                 }
@@ -94,7 +94,7 @@ namespace Tetris
                 for (int x = 0; x < shape.GetLength(0); x++){
                     for (int y = 0; y < shape.GetLength(1); y++){
                         if (shape[x, y]){
-                            while (x + pos.x >= Game1.playingfield.xSize)
+                            while (x + pos.x >= Playingfield.xSize)
                                 pos.x -= 1;
                             while (x + pos.x <= 0)
                                 pos.x += 1;

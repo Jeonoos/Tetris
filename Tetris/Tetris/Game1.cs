@@ -22,7 +22,6 @@ namespace Tetris
         TetrisBlock fallingBlock;
         public static Model model;
         public static Model model2;
-        public static Playingfield playingfield;
         public float falltimer = 0;
         public float inputtimer = 0;
         public float shakeTimer;
@@ -41,13 +40,12 @@ namespace Tetris
 
         protected override void Initialize() {
             base.Initialize();
-            playingfield = new Playingfield(10, 26);
             random = new Random();
-            for (int x = 0; x < playingfield.grid.GetLength(0); x++)
+            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
             {
-                for (int y = 0; y < playingfield.grid.GetLength(1); y++)
+                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
                 {
-                    playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
+                    Playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
                 }
             }
 
@@ -98,7 +96,7 @@ namespace Tetris
                     if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
                     {
                         fallingBlock.Solidify();
-                        playingfield.CheckForRow();
+                        Playingfield.CheckForRow();
                         if (kstate.IsKeyDown(Keys.Down))
                         {
                             shakeTimer = 300;
@@ -210,14 +208,15 @@ namespace Tetris
             
             
 
-            for (int x = 1; x < playingfield.grid.GetLength(0); x++) {
+            for (int x = 1; x < Playingfield.grid.GetLength(0); x++) {
                 blockRender.DrawCube(model, x, 0, Color.Black);
             }
-            for (int x = 0; x < playingfield.grid.GetLength(0); x++)
+
+            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
             {
-                for (int y = 0; y < playingfield.grid.GetLength(1); y++)
+                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
                 {   
-                    Cube curCube = playingfield.GetCube(new GridPos(x, y));
+                    Cube curCube = Playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
                         blockRender.DrawCube(model, x, y, curCube.color);
 

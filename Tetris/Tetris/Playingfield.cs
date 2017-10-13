@@ -6,28 +6,24 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public class Playingfield
+    public static class Playingfield
     {
-        public int xSize, ySize;
-        public Cube[,] grid;
+        public static int xSize = 10, ySize = 26;
+        public static Cube[,] grid = new Cube[xSize, ySize];
 
-        public Playingfield(int xSize, int ySize) {
-            this.xSize = xSize;
-            this.ySize = ySize;
-            grid = new Cube[xSize, ySize];
-        }
 
-        bool IsEmpty(GridPos pos) {
+
+        public static bool IsEmpty(GridPos pos) {
             if (pos.x > xSize || pos.y < 0 || pos.y > ySize || pos.y <= 0)
                 return false;
             return (GetCube(pos).cubeType == Cube.CubeType.Empty);
         }
 
-        public Cube GetCube(GridPos pos) {
+        public static Cube GetCube(GridPos pos) {
             return grid[pos.x, pos.y];
         }
 
-        public void CheckForRow() {
+        public static void CheckForRow() {
             for (int y = 0; y < ySize; y++)
             {
                 bool completeRow = true;

@@ -32,7 +32,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.model, x - 2, y + +15, color);
+                        Game1.blockRender.DrawCube(Game1.model, x - 3, y + +15, color);
                     }
                 }
             }
