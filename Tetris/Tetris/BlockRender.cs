@@ -102,6 +102,7 @@ namespace Tetris
 
         public void DrawCube(Model model, int x, int y, Color color)
         {
+
             viewMatrix = Matrix.CreateLookAt(camPosition + Vector3.Right * camOffset.X + Vector3.Up * camOffset.Y, camTarget, new Vector3(0f, 1f, 0f));
             Vector3 modelPosition = new Vector3(x * 2f,y * 2f, 0);
             foreach (ModelMesh mesh in model.Meshes)

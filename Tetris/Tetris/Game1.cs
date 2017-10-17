@@ -13,11 +13,9 @@ namespace Tetris
         Song TetrisSong;
         SoundEffect Hit, Clear, GameOver;
         public static Random random;
-        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        GraphicsDeviceManager graphics;
         Texture2D monotex;
-        bool EndFall = false;
-        public static BlockRender blockRender;
         PreviewTetrisBlock nextBlock;
         TetrisBlock fallingBlock;
         public static Model model;
@@ -35,33 +33,26 @@ namespace Tetris
 
             //graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = 720;
+            //graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
+
+            Playingfield.graphics = graphics;
         }
 
         protected override void Initialize() {
-            base.Initialize();
-            random = new Random();
-            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
-                {
-                    Playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
-                }
-            }
+            Playingfield.Initialize(this);
 
-            nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
-            fallingBlock = new TetrisBlock(nextBlock.type);
-            nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
+            base.Initialize();
         }
   
         protected override void LoadContent() {
-           // backgr = Content.Load <Texture2D>("background");
-            blockRender = new BlockRender(graphics);
-            model = Content.Load<Model>("monocube");
-            monotex = Content.Load<Texture2D>("monotex");
-            TetrisSong = Content.Load<Song>("Tetris");
-            MediaPlayer.Play(TetrisSong);
-            MediaPlayer.IsRepeating = true;
+            Playingfield.LoadContent(this);
+            //backgr = Content.Load <Texture2D>("background");
+            //model = Content.Load<Model>("monocube");
+            //monotex = Content.Load<Texture2D>("monotex");
+            //TetrisSong = Content.Load<Song>("Tetris");
+            //MediaPlayer.Play(TetrisSong);
+            //MediaPlayer.IsRepeating = true;
         }
 
       
@@ -76,18 +67,22 @@ namespace Tetris
         bool BreakFalling = false;
         double gameTimer = 0;
         protected override void Update(GameTime gameTime) {
-            
+
+            if (kstate.IsKeyDown(Keys.Escape))
+                Exit();
+
             falltimer += gameTime.ElapsedGameTime.Milliseconds;
             gameTimer += gameTime.ElapsedGameTime.Milliseconds;
             oldkstate = kstate;
             kstate = Keyboard.GetState();
-            
 
 
+            TetrisBlock fallingBlock = Playingfield.fallingBlock;
+            PreviewTetrisBlock nextBlock = Playingfield.nextBlock;
             if (gamestate == GameState.GameOver)
             {
-                blockRender.camOffset = Vector2.Zero;
-                blockRender.camPosition = new Vector3((float)Math.Sin(gameTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameTimer / 1000) * 75 + blockRender.camTarget.Z);
+                Playingfield.blockRender.camOffset = Vector2.Zero;
+                Playingfield.blockRender.camPosition = new Vector3((float)Math.Sin(gameTimer / 1000) * 75 + Playingfield.blockRender.camTarget.X, Playingfield.blockRender.camPosition.Y, (float)Math.Cos(gameTimer / 1000) * 75 + Playingfield.blockRender.camTarget.Z);
             }
             else
             {
@@ -103,7 +98,7 @@ namespace Tetris
                             BreakFalling = true;
                         }
                         fallingBlock = new TetrisBlock(nextBlock.type);
-                        nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
+                        nextBlock = new PreviewTetrisBlock(Playingfield.random.Next(0, 7));
                     }
                     else
                     {
@@ -192,9 +187,9 @@ namespace Tetris
 
                 Xbalance = MathHelper.Clamp(Xbalance, -200, 200);
                 Ybalance = MathHelper.Clamp(Ybalance, 0, 200);
-                blockRender.camOffset.X = -Xbalance / 20;
-                blockRender.camOffset.Y = Ybalance / 20;
-                blockRender.camOffset.X += (float)Math.Sin(shakeTimer / 60 * Math.PI) * shakeTimer / 20;
+                Playingfield.blockRender.camOffset.X = -Xbalance / 20;
+                Playingfield.blockRender.camOffset.Y = Ybalance / 20;
+                Playingfield.blockRender.camOffset.X += (float)Math.Sin(shakeTimer / 60 * Math.PI) * shakeTimer / 20;
                 if (shakeTimer > 0)
                     shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
             }
@@ -204,27 +199,7 @@ namespace Tetris
        
 
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-            
-
-            for (int x = 1; x < Playingfield.grid.GetLength(0); x++) {
-                blockRender.DrawCube(model, x, 0, Color.Black);
-            }
-
-            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
-            {
-                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
-                {   
-                    Cube curCube = Playingfield.GetCube(new GridPos(x, y));
-                    if (curCube.cubeType != Cube.CubeType.Empty)
-                        blockRender.DrawCube(model, x, y, curCube.color);
-
-                }
-            }
-            fallingBlock.Draw();
-            nextBlock.Draw();
-
+            Playingfield.Draw(gameTime, this);
             base.Draw(gameTime);
 
         }

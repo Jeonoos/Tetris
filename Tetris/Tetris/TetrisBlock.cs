@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Tetris
 {
-    class TetrisBlock
+    public class TetrisBlock
     {
         protected bool[,] shape;
         public Color color;
@@ -47,6 +47,9 @@ namespace Tetris
             }
         }
 
+        public void Update() {
+        }
+
         public bool CheckCollision(GridPos pos) {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
@@ -68,7 +71,7 @@ namespace Tetris
             for (int x = 0; x < shape.GetLength(0); x++){
                 for (int y = 0; y < shape.GetLength(1); y++){
                     if (shape[x, y]){
-                        Game1.blockRender.DrawCube(Game1.model, x + pos.x, y + pos.y, color);
+                        Playingfield.blockRender.DrawCube(Playingfield.model, x + pos.x, y + pos.y, color);
                     }
                 }
             }

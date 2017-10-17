@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Tetris
 {
-    class PreviewTetrisBlock: TetrisBlock
+    public class PreviewTetrisBlock: TetrisBlock
     {
         public PreviewTetrisBlock(int type) : base(type) {
 
@@ -32,7 +32,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.model, x - 3, y + +15, color);
+                        Playingfield.blockRender.DrawCube(Playingfield.model, x - 3, y + +15, color);
                     }
                 }
             }
