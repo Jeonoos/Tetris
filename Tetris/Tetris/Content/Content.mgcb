@@ -105,6 +105,7 @@
 /processor:FontDescriptionProcessor
 /processorParam:TextureFormat=Compressed
 /build:Score.spritefont
+<<<<<<< HEAD
 
 #begin EmptyCube.fbx
 /importer:FbxImporter
@@ -124,4 +125,6 @@
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=DxtCompressed
 /build:EmptyCube.fbx
+=======
+>>>>>>> e7ea384c48cf7198b6c401732bb7b5366dacf9a7
 
