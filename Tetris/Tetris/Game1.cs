@@ -21,6 +21,7 @@ namespace Tetris
         TetrisBlock fallingBlock;
         PreviewTetrisBlock savedBlock;
         GhostBlock ghostBlock;
+        SpriteFont font;
         public static Model model;
         public static Model modeltransp;
         public static Model backgroundmodel;
@@ -68,6 +69,7 @@ namespace Tetris
   
         protected override void LoadContent() 
             {
+            font = Content.Load<SpriteFont>("Score");
             backgr = Content.Load <Texture2D>("Backgr");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
@@ -153,6 +155,7 @@ namespace Tetris
                             fallingBlock = new TetrisBlock(savedBlock.type);
                             savedBlock = new PreviewTetrisBlock(temptype);
                             savedBlock.previewPosition = new GridPos(-3, 0);
+                            savedBlock.previewPosition = new GridPos(-3, 18);
                         }
                         else
                         {
@@ -160,6 +163,7 @@ namespace Tetris
                             fallingBlock = new TetrisBlock(nextBlock.type);
                             nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
                             savedBlock.previewPosition = new GridPos(-3, 0);
+                            savedBlock.previewPosition = new GridPos(-3, 18);
                         }
                     }
                 }
@@ -265,27 +269,52 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) 
             {
+<<<<<<< HEAD
             GraphicsDevice.Clear(LevelColors[level]);
             blockRender.DrawCube(backgroundmodel,0,0,-20,Color.White);
             //spriteBatch.Begin();
             //spriteBatch.Draw(backgr,Vector2.Zero,Color.White);
             //spriteBatch.End();
+=======
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Level: " + (level+=1), new Vector2(10, 50), Color.White);
+            spriteBatch.End();
+
+>>>>>>> 4212048fbcf82f8b3043c903ce487fb60b885512
             for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
             {
                 blockRender.DrawCube(model, x, 0, 0, Color.Black);
+                blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
             }
+            
+            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+            {
+                for(int y = 1; y < Playingfield.grid.Length; y++)
+                    blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
+            }
+<<<<<<< HEAD
 
             for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+=======
+            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
+>>>>>>> 4212048fbcf82f8b3043c903ce487fb60b885512
             {
                 for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
                 {   
                     Cube curCube = Playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
+<<<<<<< HEAD
                         blockRender.DrawCube(model, x, y, 0, curCube.color);
                     else if  (y < Playingfield.grid.GetLength(1) -4)
                     {
                         blockRender.DrawCube(emptycube, x, y, 0, Color.White, 0.9f);
                     }
+=======
+                        blockRender.DrawCube(model, x, y, 0, curCube.color, 0);
+>>>>>>> 4212048fbcf82f8b3043c903ce487fb60b885512
 
                 }
             }

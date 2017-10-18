@@ -10,6 +10,7 @@ namespace Tetris
     class PreviewTetrisBlock: TetrisBlock
     {
         public GridPos previewPosition = new GridPos(-3, 15);
+        public GridPos previewPosition = new GridPos(11, 18);
         public PreviewTetrisBlock(int type) : base(type) 
             {
 
