@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Tetris
-{
+{  
     class GhostBlock: TetrisBlock
     {
         public GhostBlock(int type, GridPos pos, bool[,] shape) : base(type) {
