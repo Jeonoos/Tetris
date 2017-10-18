@@ -66,6 +66,7 @@ namespace Tetris
         float Ybalance = 0;
         bool BreakFalling = false;
         double gameTimer = 0;
+        float gameOverRotate = 0;
         protected override void Update(GameTime gameTime) {
 
             if (kstate.IsKeyDown(Keys.Escape))
@@ -81,12 +82,13 @@ namespace Tetris
             PreviewTetrisBlock nextBlock = Playingfield.nextBlock;
             if (gamestate == GameState.GameOver)
             {
+                gameOverRotate += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
                 Playingfield.blockRender.camOffset = Vector2.Zero;
-                Playingfield.blockRender.camPosition = new Vector3((float)Math.Sin(gameTimer / 1000) * 75 + Playingfield.blockRender.camTarget.X, Playingfield.blockRender.camPosition.Y, (float)Math.Cos(gameTimer / 1000) * 75 + Playingfield.blockRender.camTarget.Z);
+                Playingfield.blockRender.camPosition += (new Vector3((float)Math.Sin(gameOverRotate / 1000) * 75 + Playingfield.blockRender.camTarget.X, Playingfield.blockRender.camPosition.Y, (float)Math.Cos(gameOverRotate / 1000) * 75 + Playingfield.blockRender.camTarget.Z) -Playingfield.blockRender.camPosition) * 0.1f;
             }
             else
             {
-                if (falltimer > 200)
+                if (falltimer > 500)
                 {
                     if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
                     {
@@ -174,7 +176,7 @@ namespace Tetris
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) && !BreakFalling)
                 {
-                    falltimer = 200;
+                    falltimer = 500;
                     Ybalance += gameTime.ElapsedGameTime.Milliseconds;
                 }
                 else
@@ -196,7 +198,10 @@ namespace Tetris
             base.Update(gameTime);
         }
 
-       
+        public void Gameover() {
+            gamestate = GameState.GameOver;
+            gameTimer = 0;
+        }
 
         protected override void Draw(GameTime gameTime) {
             Playingfield.Draw(gameTime, this);
