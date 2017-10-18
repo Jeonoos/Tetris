@@ -16,7 +16,7 @@ namespace Tetris
             {
                 this.pos.y--;
             }
-            color = Color.White;
+            //color = Color.White;
         }
 
         public override void Draw() 

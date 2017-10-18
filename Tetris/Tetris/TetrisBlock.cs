@@ -27,12 +27,9 @@ namespace Tetris
 
                 default: shape = new bool[,] { { true, true }, { true, true } }; color = Color.LightBlue; break;
             }
-            pos = new GridPos(5, 22);
+            pos = new GridPos(5, 23);
 
-            if (CheckCollision(pos))
-            {
-                Game1.gamestate = Game1.GameState.GameOver;
-            }
+
         }
 
         public void SnapDown() 
@@ -53,6 +50,9 @@ namespace Tetris
                     {
                         Playingfield.grid[x + pos.x, y + pos.y].cubeType = Cube.CubeType.Solid;
                         Playingfield.grid[x + pos.x, y + pos.y].color = color;
+                        if (y + pos.y >= Playingfield.grid.GetLength(1) - 4) {
+                            Game1.gamestate = Game1.GameState.GameOver;
+                        }
                     }
                 }
             }

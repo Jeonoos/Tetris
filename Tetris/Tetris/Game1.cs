@@ -24,10 +24,12 @@ namespace Tetris
         public static Model model;
         public static Model modeltransp;
         public static Model backgroundmodel;
+        public static Model emptycube;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
         public static GameState gamestate = GameState.Game;
         public enum GameState { Game, GameOver}
         public float[] LevelSpeeds = {600,400,300,200,150,100,75,50,25,10};
+        public Color[] LevelColors = { Color.LightBlue, Color.LightGreen, Color.LightGoldenrodYellow, Color.Black, Color.White, Color.Orange, Color.Blue, Color.DarkCyan , Color.DarkRed, Color.DarkSalmon};
         public int level = 1;
         public static float Score = 0;
         public bool UsedHold = false;
@@ -71,6 +73,7 @@ namespace Tetris
             model = Content.Load<Model>("monocube");
             modeltransp = Content.Load<Model>("monocubetransp");
             backgroundmodel = Content.Load<Model>("Background");
+            emptycube = Content.Load<Model>("EmptyCube");
             monotex = Content.Load<Texture2D>("monotex");
             TetrisSong = Content.Load<Song>("Tetris");
             MediaPlayer.Play(TetrisSong);
@@ -89,6 +92,7 @@ namespace Tetris
         bool BreakFalling = false;
         double gameTimer = 0;
         double gameOverTimer = 0;
+        float groundMoveTimer = 300f;
         protected override void Update(GameTime gameTime) 
             {
             
@@ -113,16 +117,23 @@ namespace Tetris
                 {
                     if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
                     {
-                        fallingBlock.Solidify();
-                        Playingfield.CheckForRow();
-                        if (kstate.IsKeyDown(Keys.Down))
+                        if (groundMoveTimer <= 0 || kstate.IsKeyDown(Keys.Down))
                         {
-                            shakeTimer = 300;
-                            BreakFalling = true;
+                            groundMoveTimer = 300f;
+                            fallingBlock.Solidify();
+                            Playingfield.CheckForRow();
+                            if (kstate.IsKeyDown(Keys.Down))
+                            {
+                                shakeTimer = 300;
+                                BreakFalling = true;
+                            }
+                            UsedHold = false;
+                            fallingBlock = new TetrisBlock(nextBlock.type);
+                            nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
                         }
-                        UsedHold = false;
-                        fallingBlock = new TetrisBlock(nextBlock.type);
-                        nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
+                        else {
+                            groundMoveTimer -= gameTime.ElapsedGameTime.Milliseconds;
+                        }
                     }
                     else{
                         fallingBlock.pos.y -= 1;
@@ -156,7 +167,9 @@ namespace Tetris
                 if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
                 {
                     fallingBlock.SnapDown();
+                    groundMoveTimer = 0;
                     falltimer = LevelSpeeds[level];
+                    shakeTimer = 200;
                 }
 
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -226,7 +239,7 @@ namespace Tetris
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) && !BreakFalling)
                 {
-                    falltimer = LevelSpeeds[level];
+                    falltimer += gameTime.ElapsedGameTime.Milliseconds * 15;
                     Ybalance += gameTime.ElapsedGameTime.Milliseconds;
                 }
                 else
@@ -252,7 +265,7 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) 
             {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(LevelColors[level]);
             blockRender.DrawCube(backgroundmodel,0,0,-20,Color.White);
             //spriteBatch.Begin();
             //spriteBatch.Draw(backgr,Vector2.Zero,Color.White);
@@ -262,13 +275,17 @@ namespace Tetris
                 blockRender.DrawCube(model, x, 0, 0, Color.Black);
             }
 
-            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
+            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
             {
                 for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
                 {   
                     Cube curCube = Playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
                         blockRender.DrawCube(model, x, y, 0, curCube.color);
+                    else if  (y < Playingfield.grid.GetLength(1) -4)
+                    {
+                        blockRender.DrawCube(emptycube, x, y, 0, Color.White, 0.9f);
+                    }
 
                 }
             }
