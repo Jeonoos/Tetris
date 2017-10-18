@@ -100,3 +100,9 @@
 /processorParam:TextureFormat=DxtCompressed
 /build:Background.fbx
 
+#begin Score.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Score.spritefont
+
