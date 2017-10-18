@@ -11,7 +11,8 @@ namespace Tetris
     {
         public Color color = Color.White;
         public CubeType cubeType;
-        public Cube(CubeType cubeType, Color color) {
+        public Cube(CubeType cubeType, Color color) 
+            {
             this.color = color;
             this.cubeType = cubeType;
         }

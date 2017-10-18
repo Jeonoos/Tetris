@@ -13,7 +13,8 @@ namespace Tetris
         public Color color;
         public GridPos pos;
         public int type;
-        public TetrisBlock(int type) {
+        public TetrisBlock(int type) 
+            {
             this.type = type;
             switch (type)
             {
@@ -27,20 +28,23 @@ namespace Tetris
                 default: shape = new bool[,] { { true, true }, { true, true } }; color = Color.LightBlue; break;
             }
             pos = new GridPos(5, 22);
+
             if (CheckCollision(pos))
             {
                 Game1.gamestate = Game1.GameState.GameOver;
             }
         }
 
-        public void SnapDown() {
+        public void SnapDown() 
+            {
             while (!CheckCollision(new GridPos(pos.x, pos.y - 1)))
             {
                 pos.y--;
             }
         }
 
-        public void Solidify() {
+        public void Solidify() 
+            {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
                 for (int y = 0; y < shape.GetLength(1); y++)
@@ -54,7 +58,8 @@ namespace Tetris
             }
         }
 
-        public virtual bool CheckCollision(GridPos pos) {
+        public virtual bool CheckCollision(GridPos pos) 
+            {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
                 for (int y = 0; y < shape.GetLength(1); y++)
@@ -71,18 +76,24 @@ namespace Tetris
             return false;
         }
 
-        public virtual void Draw() {
-            for (int x = 0; x < shape.GetLength(0); x++){
-                for (int y = 0; y < shape.GetLength(1); y++){
-                    if (shape[x, y]){
-                        Game1.blockRender.DrawCube(Game1.model, x + pos.x, y + pos.y, color);
+        public virtual void Draw() 
+            {
+            for (int x = 0; x < shape.GetLength(0); x++)
+            {
+                for (int y = 0; y < shape.GetLength(1); y++)
+                {
+                    if (shape[x, y])
+                    {
+                        Game1.blockRender.DrawCube(Game1.model, x + pos.x, y + pos.y, 0, color);
                     }
                 }
             }
         }
 
-        public void Rotate() {
-            do{
+        public void Rotate() 
+            {
+            do
+            {
                 bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
                 for (int x = 0; x < shape.GetLength(0); x++){
                     for (int y = 0; y < shape.GetLength(1); y++){
@@ -108,7 +119,8 @@ namespace Tetris
                         }
                     }
                 }
-            } while (CheckCollision(pos));
+            }
+            while (CheckCollision(pos));
         }
     }
 }

@@ -11,14 +11,6 @@ namespace Tetris
         public static int xSize = 10, ySize = 26;
         public static Cube[,] grid = new Cube[xSize, ySize];
 
-
-
-        public static bool IsEmpty(GridPos pos) {
-            if (pos.x > xSize || pos.y < 0 || pos.y > ySize || pos.y <= 0)
-                return false;
-            return (GetCube(pos).cubeType == Cube.CubeType.Empty);
-        }
-
         public static Cube GetCube(GridPos pos) {
             return grid[pos.x, pos.y];
         }
@@ -34,10 +26,10 @@ namespace Tetris
                         completeRow = false;
                     }
                 }
-                if (completeRow)
+                if (completeRow == true)
                 {
                     Game1.Score += 100;
-                    for (int x = 0; x < xSize; x++)
+                    for (int x = 1; x < xSize; x++)
                     {
                         grid[x, y].cubeType = Cube.CubeType.Empty;
                     }

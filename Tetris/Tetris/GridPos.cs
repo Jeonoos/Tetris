@@ -9,7 +9,8 @@ namespace Tetris
     public struct GridPos
     {
         public int x, y;
-        public GridPos(int x, int y) {
+        public GridPos(int x, int y) 
+            {
             this.x = x;
             this.y = y;
         }

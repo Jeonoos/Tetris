@@ -10,18 +10,20 @@ namespace Tetris
     class PreviewTetrisBlock: TetrisBlock
     {
         public GridPos previewPosition = new GridPos(-3, 15);
-        public PreviewTetrisBlock(int type) : base(type) {
+        public PreviewTetrisBlock(int type) : base(type) 
+            {
 
         }
 
-        public override void Draw() {
+        public override void Draw() 
+            {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
                 for (int y = 0; y < shape.GetLength(1); y++)
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.model, x + previewPosition.x, y + previewPosition.y, color);
+                        Game1.blockRender.DrawCube(Game1.model, x + previewPosition.x, y + previewPosition.y, -3, color);
                     }
                 }
             }
