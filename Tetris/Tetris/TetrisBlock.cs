@@ -9,7 +9,7 @@ namespace Tetris
 {
     class TetrisBlock
     {
-        protected bool[,] shape;
+        public bool[,] shape;
         public Color color;
         public GridPos pos;
         public int type;
@@ -33,6 +33,13 @@ namespace Tetris
             }
         }
 
+        public void SnapDown() {
+            while (!CheckCollision(new GridPos(pos.x, pos.y - 1)))
+            {
+                pos.y--;
+            }
+        }
+
         public void Solidify() {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
@@ -47,7 +54,7 @@ namespace Tetris
             }
         }
 
-        public bool CheckCollision(GridPos pos) {
+        public virtual bool CheckCollision(GridPos pos) {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
                 for (int y = 0; y < shape.GetLength(1); y++)

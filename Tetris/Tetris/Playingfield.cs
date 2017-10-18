@@ -36,6 +36,7 @@ namespace Tetris
                 }
                 if (completeRow)
                 {
+                    Game1.Score += 100;
                     for (int x = 0; x < xSize; x++)
                     {
                         grid[x, y].cubeType = Cube.CubeType.Empty;

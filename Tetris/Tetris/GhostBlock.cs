@@ -7,11 +7,16 @@ using Microsoft.Xna.Framework;
 
 namespace Tetris
 {
-    class PreviewTetrisBlock: TetrisBlock
+    class GhostBlock: TetrisBlock
     {
-        public GridPos previewPosition = new GridPos(-3, 15);
-        public PreviewTetrisBlock(int type) : base(type) {
-
+        public GhostBlock(int type, GridPos pos, bool[,] shape) : base(type) {
+            this.pos = pos;
+            this.shape = shape;
+            while (!CheckCollision(new GridPos(pos.x, this.pos.y - 1)))
+            {
+                this.pos.y--;
+            }
+            color = Color.White;
         }
 
         public override void Draw() {
@@ -21,7 +26,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.model, x + previewPosition.x, y + previewPosition.y, color);
+                        Game1.blockRender.DrawCube(Game1.modeltransp, x + pos.x, y + pos.y, color, 0.6f);
                     }
                 }
             }

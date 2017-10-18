@@ -100,7 +100,7 @@ namespace Tetris
             base.Update(gameTime);
         }
 
-        public void DrawCube(Model model, int x, int y, Color color)
+        public void DrawCube(Model model, int x, int y, Color color, float transparancy = 0)
         {
             viewMatrix = Matrix.CreateLookAt(camPosition + Vector3.Right * camOffset.X + Vector3.Up * camOffset.Y, camTarget, new Vector3(0f, 1f, 0f));
             Vector3 modelPosition = new Vector3(x * 2f,y * 2f, 0);
@@ -114,7 +114,8 @@ namespace Tetris
                     effect.View = viewMatrix;
                     effect.World = Matrix.CreateTranslation(modelPosition);
                     effect.Projection = projectionMatrix;
-                    
+                    graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+                    effect.Alpha = 1 - transparancy;
                 }
                 mesh.Draw();
 

@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="BlockRender.cs" />
     <Compile Include="Cube.cs" />
+    <Compile Include="GhostBlock.cs" />
     <Compile Include="GridPos.cs" />
     <Compile Include="Playingfield.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -61,6 +62,7 @@
     <Content Include="Content\monotex.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\monotextransparant.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\monocube.fbx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\monocubetransp.fbx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
