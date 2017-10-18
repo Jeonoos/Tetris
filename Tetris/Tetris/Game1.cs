@@ -283,11 +283,6 @@ namespace Tetris
                 blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
             }
             
-            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
-            {
-                for(int y = 1; y < Playingfield.grid.Length; y++)
-                    blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
-            }
 
             for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
 
@@ -299,7 +294,7 @@ namespace Tetris
                         blockRender.DrawCube(model, x, y, 0, curCube.color);
                     else if  (y < Playingfield.grid.GetLength(1) -4)
                     {
-                        blockRender.DrawCube(emptycube, x, y, 0, Color.White, 0.9f);
+                        blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
                     }
 
                 }
