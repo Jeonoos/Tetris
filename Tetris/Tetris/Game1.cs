@@ -267,13 +267,13 @@ namespace Tetris
                         shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
 
 
-                    if (gamestate == GameState.GameOver)
+                    
+                }if (gamestate == GameState.GameOver)
                     {
                         gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
                         blockRender.camOffset = Vector2.Zero;
                         blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
                     }
-                }
                 base.Update(gameTime);
             }
         }
@@ -290,7 +290,7 @@ namespace Tetris
                // spriteBatch.Draw(backgr, new Vector2 (10,10), Color.White);
                 spriteBatch.End();
             }
-            if (gamestate == GameState.Game)
+            if (gamestate == GameState.Game || gamestate== GameState.GameOver)
             {
                 
           
