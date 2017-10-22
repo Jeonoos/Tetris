@@ -366,10 +366,7 @@ namespace Tetris
                     spriteBatch.Draw(Introscherm,new Vector2((GraphicsDevice.Viewport.Width / 2) - (Introscherm.Width / 2), (GraphicsDevice.Viewport.Height / 4) - (Introscherm.Height / 2)), Color.White);
                     spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
-
-<<<<<<< HEAD
-                    spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
-                    spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
+                    
                     spriteBatch.DrawString(smallText, "Press M to mute music", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 140), Color.White);
 
 
