@@ -80,7 +80,7 @@ namespace Tetris
         }
         public float volume = 0.2f;
   
-        protected override void LoadContent() 
+        protected override void LoadContent()                                                   
             {
 
             font = Content.Load<SpriteFont>("Score");
@@ -332,18 +332,21 @@ namespace Tetris
                     spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
 
-                    spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
-                    spriteBatch.DrawString(smallText, "Press space to begin", new Vector2(50, 60), Color.White);
-                    spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
+                    
 
                     break;
+
                 case GameState.Game:
+
                     DrawGame(mainFrame);
+
                     break;
                 case GameState.GameOver:
+
                     DrawGame(mainFrame);
                     spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
                     spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
+
                     break;
                 case GameState.Paused:
 
