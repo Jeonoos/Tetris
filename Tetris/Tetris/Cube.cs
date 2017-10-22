@@ -17,7 +17,7 @@ namespace Tetris
             this.cubeType = cubeType;
         }
 
-        public enum CubeType
+        public enum CubeType                                // 2 types of "Cube"
         {
             Empty, Solid
         }
