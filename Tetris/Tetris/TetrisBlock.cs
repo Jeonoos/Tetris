@@ -66,7 +66,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        if (pos.x + x >= Playingfield.xSize || pos.x + x <= 0 || pos.y + y >= Playingfield.ySize || pos.y + y <= 0)
+                        if (pos.x + x >= Playingfield.grid.GetLength(0) || pos.x + x < 0 || pos.y + y >= Playingfield.ySize || pos.y + y <= 0)
                             return true;
                         if (Playingfield.grid[x + pos.x, y + pos.y].cubeType != Cube.CubeType.Empty)
                             return true;
@@ -112,9 +112,9 @@ namespace Tetris
                 for (int x = 0; x < shape.GetLength(0); x++){
                     for (int y = 0; y < shape.GetLength(1); y++){
                         if (shape[x, y]){
-                            while (x + pos.x >= Playingfield.xSize)
+                            while (x + pos.x >= Playingfield.grid.GetLength(0))
                                 pos.x -= 1;
-                            while (x + pos.x <= 0)
+                            while (x + pos.x < 0)
                                 pos.x += 1;
                         }
                     }
