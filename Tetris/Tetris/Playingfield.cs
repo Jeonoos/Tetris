@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Tetris
 {
     public static class Playingfield
-    {
-        public static int xSize = 12, ySize = 27, actualHeight = 20;
+    {                                                                                               //Grid
+        public static int xSize = 12, ySize = 27, actualHeight = 20;                                //Grid width and height
         public static Cube[,] grid = new Cube[xSize, ySize];
 
         public static Cube GetCube(GridPos pos) {
             return grid[pos.x, pos.y];
         }
 
-        public static void CheckForRow() {
+        public static void CheckForRow() {                                                          //Kijkt of er een rij is gemaakt
             for (int y = 0; y < ySize; y++)
             {
                 bool completeRow = true;
@@ -26,9 +26,9 @@ namespace Tetris
                         completeRow = false;
                     }
                 }
-                if (completeRow == true)
+                if (completeRow == true)                                                            //Als dit true is, worden de blokjes verwijderd en krijg je 100 punten.
                 {
-                    Game1.Clearsound.Play();
+                    Game1.Clearsound.Play();    
                     Game1.Score += 100;
                     for (int x = 1; x < xSize; x++)
                     {

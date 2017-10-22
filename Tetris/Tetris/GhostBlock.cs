@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Tetris
 {  
-    class GhostBlock: TetrisBlock
+    class GhostBlock: TetrisBlock                                                                               //Ghostblock laat zien waar je blok zal neervallen.
     {
         public GhostBlock(int type, GridPos pos, bool[,] shape) : base(type) {
             this.pos = pos;
@@ -19,7 +19,7 @@ namespace Tetris
             //color = Color.White;
         }
 
-        public override void Draw() 
+        public override void Draw()                                                                     
             {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
@@ -27,7 +27,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.modeltransp, x + pos.x, y + pos.y, 0, color, 0.6f);
+                        Game1.blockRender.DrawCube(Game1.modeltransp, x + pos.x, y + pos.y, 0, color, 0.6f);    //Wordt een transparant model voor gebruikt.
                     }
                 }
             }
