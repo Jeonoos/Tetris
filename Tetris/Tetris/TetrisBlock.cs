@@ -50,7 +50,7 @@ namespace Tetris
                     {
                         Playingfield.grid[x + pos.x, y + pos.y].cubeType = Cube.CubeType.Solid;
                         Playingfield.grid[x + pos.x, y + pos.y].color = color;
-                        if (y + pos.y >= Playingfield.grid.GetLength(1) - 4) {
+                        if (y + pos.y > Playingfield.actualHeight) {
                             Game1.gamestate = Game1.GameState.GameOver;
                         }
                     }
