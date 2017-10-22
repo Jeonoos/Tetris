@@ -138,6 +138,14 @@ namespace Tetris
 
         protected override void Update(GameTime gameTime)                                                                   //Update
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.L))    //Increase sound
+                MediaPlayer.Volume += 0.005f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.K))    //Decrease sound
+                MediaPlayer.Volume -= 0.005f;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.M))    //mute sound
+                MediaPlayer.Volume = 0;
 
             oldkstate = kstate;
             kstate = Keyboard.GetState();
@@ -185,14 +193,7 @@ namespace Tetris
                     level = MathHelper.Clamp((int)Math.Floor(Score / 1000), 0, LevelSpeeds.Length - 1);
 
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.L))    //Increase sound
-                        MediaPlayer.Volume += 0.005f;
-
-                    if (Keyboard.GetState().IsKeyDown(Keys.K))    //Decrease sound
-                        MediaPlayer.Volume -= 0.005f;
-
-                    if (Keyboard.GetState().IsKeyDown(Keys.M))    //mute sound
-                        MediaPlayer.Volume = 0;
+                    
 
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape)) //pause
                         gamestate = GameState.Paused;
@@ -370,7 +371,8 @@ namespace Tetris
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
 
                     
-                    spriteBatch.DrawString(smallText, "Press M to mute music", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 140), Color.White);
+                    spriteBatch.DrawString(smallText, "Press M to mute music\n\nPress L to increase Volume\n\nPress K to decrease Volume", new Vector2((GraphicsDevice.Viewport.Width / 5f) , GraphicsDevice.Viewport.Height - 180), Color.White);
+                   
 
 
                     break;
