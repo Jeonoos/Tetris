@@ -155,6 +155,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Score2.spritefont
 
+<<<<<<< HEAD
 #begin cage .fbx
 /importer:FbxImporter
 /processor:ModelProcessor
@@ -175,6 +176,9 @@
 /build:cage .fbx
 
 #begin _original.jpg
+=======
+#begin Gameoverdim.png
+>>>>>>> 7dde9dfbf3ba3341efa9918ceec51ba972133e27
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -184,5 +188,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+<<<<<<< HEAD
 /build:_original.jpg
+=======
+/build:Gameoverdim.png
+>>>>>>> 7dde9dfbf3ba3341efa9918ceec51ba972133e27
 
