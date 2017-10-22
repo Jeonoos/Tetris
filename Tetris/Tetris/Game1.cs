@@ -145,9 +145,9 @@ namespace Tetris
 
             switch (gamestate)
             {
-<<<<<<< HEAD
+
                 case GameState.GameOver:                                                //Alles wat tijdens "GameOver" gebeurt
-=======
+
                 case GameState.Paused:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !oldkstate.IsKeyDown(Keys.Escape))
                         gamestate = GameState.Menu;
@@ -163,13 +163,13 @@ namespace Tetris
                         Initialize();
                         gamestate = GameState.Game;
                     }
->>>>>>> a0b3aa55e72c111064fb19825ca0490f1ac1b154
+
 
                     gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
                     blockRender.camOffset = Vector2.Zero;
                     blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
                     break;
-<<<<<<< HEAD
+
 
                 case GameState.Menu:                                                    // Alles wat tijdens "Menu" gebeurt
                    
@@ -177,7 +177,7 @@ namespace Tetris
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))          // Spatie 
                         gamestate = GameState.Game;
 
-=======
+
                 case GameState.Menu:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !oldkstate.IsKeyDown(Keys.Escape))
                     {
@@ -189,7 +189,7 @@ namespace Tetris
                         Initialize();
                         gamestate = GameState.Game;
                     }
->>>>>>> a0b3aa55e72c111064fb19825ca0490f1ac1b154
+
                     break;
                 case GameState.Game:
                     falltimer += gameTime.ElapsedGameTime.Milliseconds;
