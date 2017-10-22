@@ -182,14 +182,14 @@ namespace Tetris
                             {
                                 fallingBlock = new TetrisBlock(savedBlock.type);
                                 savedBlock = new PreviewTetrisBlock(temptype);
-                                savedBlock.previewPosition = new GridPos(-3, 18);
+                                savedBlock.previewPosition = new GridPos(-4, 18);
                             }
                             else
                             {
                                 savedBlock = new PreviewTetrisBlock(temptype);
                                 fallingBlock = new TetrisBlock(nextBlock.type);
                                 nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
-                                savedBlock.previewPosition = new GridPos(-3, 18);
+                                savedBlock.previewPosition = new GridPos(-4, 18);
                             }
                         }
                     }
@@ -335,16 +335,16 @@ namespace Tetris
             spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 60), Color.White);
 
             spriteBatch.End();
-            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
             {
                 blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
             }
 
 
-            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+            for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
 
             {
-                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
+                for (int y = 1; y < Playingfield.grid.GetLength(1); y++)
                 {
                     Cube curCube = Playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)

@@ -19,7 +19,7 @@ namespace Tetris
             for (int y = 0; y < ySize; y++)
             {
                 bool completeRow = true;
-                for (int x = 1; x < xSize; x++)
+                for (int x = 0; x < xSize; x++)
                 {
                     if (grid[x, y].cubeType == Cube.CubeType.Empty)
                     {
