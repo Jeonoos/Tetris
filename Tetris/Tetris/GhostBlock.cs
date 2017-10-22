@@ -12,11 +12,10 @@ namespace Tetris
         public GhostBlock(int type, GridPos pos, bool[,] shape) : base(type) {
             this.pos = pos;
             this.shape = shape;
-            while (!CheckCollision(new GridPos(pos.x, this.pos.y - 1)))
+            while (!CheckCollision(new GridPos(pos.x, this.pos.y - 1)))                                         //blijft naar beneden vallen tot het iets raakt
             {
                 this.pos.y--;
             }
-            //color = Color.White;
         }
 
         public override void Draw()                                                                     
@@ -27,7 +26,7 @@ namespace Tetris
                 {
                     if (shape[x, y])
                     {
-                        Game1.blockRender.DrawCube(Game1.modeltransp, x + pos.x, y + pos.y, 0, color, 0.6f);    //Wordt een transparant model voor gebruikt.
+                        Game1.blockRender.DrawCube(Game1.model, x + pos.x, y + pos.y, 0, color, 0.6f);          //wordt transparant gerenderd
                     }
                 }
             }

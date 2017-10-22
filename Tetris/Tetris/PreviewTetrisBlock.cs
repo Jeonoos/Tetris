@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Tetris
 {
-    class PreviewTetrisBlock: TetrisBlock                                                                       //Volgende tetrisblok
+    class PreviewTetrisBlock: TetrisBlock                     //een preview blok die afzonderlijk kan worden gerenderd
     {
         public GridPos previewPosition = new GridPos(13, 18);
         public PreviewTetrisBlock(int type) : base(type) 

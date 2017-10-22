@@ -40,7 +40,7 @@ namespace Tetris
             }
         }
 
-        public void Solidify() 
+        public void Solidify()                          //zet het vallend blok vast in het grid
             {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
@@ -50,7 +50,7 @@ namespace Tetris
                     {
                         Playingfield.grid[x + pos.x, y + pos.y].cubeType = Cube.CubeType.Solid;
                         Playingfield.grid[x + pos.x, y + pos.y].color = color;
-                        if (y + pos.y > Playingfield.actualHeight) {
+                        if (y + pos.y > Playingfield.actualHeight) {          //als het blok te hoog komt, is het game over
                             Game1.gamestate = Game1.GameState.GameOver;
                         }
                     }
@@ -58,7 +58,7 @@ namespace Tetris
             }
         }
 
-        public virtual bool CheckCollision(GridPos pos) 
+        public virtual bool CheckCollision(GridPos pos)  //checkt of er op die plek in de grid een blok staat en of het buiten de grid is.
             {
             for (int x = 0; x < shape.GetLength(0); x++)
             {
@@ -90,12 +90,13 @@ namespace Tetris
             }
         }
 
-        public void Rotate() 
+        public void Rotate()                                                        //draait het tetrisblok met de klok mee
             {
             do
             {
                 bool[,] temp = new bool[shape.GetLength(0), shape.GetLength(1)];
-                for (int x = 0; x < shape.GetLength(0); x++){
+                for (int x = 0; x < shape.GetLength(0); x++)
+                {                                                                   //spiegelt de vorm om de y-as
                     for (int y = 0; y < shape.GetLength(1); y++){
                         temp[x, y] = shape[-x + shape.GetLength(0) - 1, y];
                     }
@@ -103,13 +104,13 @@ namespace Tetris
                 shape = temp;
                 temp = new bool[shape.GetLength(1), shape.GetLength(0)];
 
-                for (int x = 0; x < shape.GetLength(0); x++){
+                for (int x = 0; x < shape.GetLength(0); x++){                       //wisselt de x- en y-as om
                     for (int y = 0; y < shape.GetLength(1); y++){
                         temp[y, x] = shape[x, y];
                     }
                 }
                 shape = temp;
-                for (int x = 0; x < shape.GetLength(0); x++){
+                for (int x = 0; x < shape.GetLength(0); x++){                       //beweegt het blok naar links/rechts als het na de rotatie zou colliden met een ander blok of buiten de grid komen
                     for (int y = 0; y < shape.GetLength(1); y++){
                         if (shape[x, y]){
                             while (x + pos.x >= Playingfield.grid.GetLength(0))
@@ -120,7 +121,7 @@ namespace Tetris
                     }
                 }
             }
-            while (CheckCollision(pos));
+            while (CheckCollision(pos));                                            //als de bovenstaande beweging niet genoeg is om het blok niet te laten colliden, blijft het doordraaien tot het niet meer collide (meestal draait het dus weer terug naar zn eerste positie)
         }
     }
 }

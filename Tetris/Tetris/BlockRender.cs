@@ -10,7 +10,6 @@ namespace Tetris
         GraphicsDeviceManager graphics;
         public Vector3 camTarget,camPosition;
         Matrix projectionMatrix,viewMatrix,worldMatrix;
-        bool orbit = false;
         public Vector2 camOffset = Vector2.Zero;
         public BlockRender(GraphicsDeviceManager graphics) {
             this.graphics = graphics;
@@ -32,7 +31,7 @@ namespace Tetris
 
         }
 
-        public void DrawCube(Model model, int x, int y, int z, Color color, float transparancy = 0)             //Laadt het model van de cubus en tekent het.
+        public void DrawCube(Model model, int x, int y, int z, Color color, float transparancy = 0)             //Laadt een model en tekent het.
         {
             viewMatrix = Matrix.CreateLookAt(camPosition + Vector3.Right * camOffset.X + Vector3.Up * camOffset.Y, camTarget, new Vector3(0f, 1f, 0f));
             Vector3 modelPosition = new Vector3(x * 2f,y * 2f, z);

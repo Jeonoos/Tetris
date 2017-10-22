@@ -29,7 +29,7 @@ namespace Tetris
         GhostBlock ghostBlock;
         SpriteFont font, font2, smallText;
         
-        public static Model model,modeltransp ,backgroundmodel ,emptycube;
+        public static Model model ,backgroundmodel ,emptycube;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
         public static GameState gamestate = GameState.Menu;
         public enum GameState { Game, GameOver, Menu, Paused}
@@ -122,7 +122,6 @@ namespace Tetris
 
             emptycube = Content.Load<Model>("EmptyCube");
             model = Content.Load<Model>("monocube");
-            modeltransp = Content.Load<Model>("monocubetransp");
             blockRender = new BlockRender(graphics);
 
             MediaPlayer.Play(TetrisSong);
@@ -145,8 +144,6 @@ namespace Tetris
 
             switch (gamestate)
             {
-
-
                 case GameState.Paused:
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !oldkstate.IsKeyDown(Keys.Escape))
                         gamestate = GameState.Menu;
@@ -413,6 +410,7 @@ namespace Tetris
             spriteBatch.DrawString(smallText, "Press esc to pauze ", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 120), Color.White);
 
             spriteBatch.End();
+
             for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
             {
                 blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
@@ -429,7 +427,7 @@ namespace Tetris
                         blockRender.DrawCube(model, x, y, 0, curCube.color);
                     else if (y <= Playingfield.actualHeight)
                     {
-                        blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
+                        blockRender.DrawCube(model, x, y, 0, Color.White, 0.9f);
                     }
 
                 }
