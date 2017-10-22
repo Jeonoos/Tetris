@@ -26,10 +26,11 @@ namespace Tetris
         public static Model model,modeltransp ,backgroundmodel ,emptycube;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
         public static GameState gamestate = GameState.Menu;
-        public enum GameState { Game, GameOver, Menu}
+        public enum GameState { Game, GameOver, Menu, Paused}
         public float[] LevelSpeeds = {500,400,300,200,150,100,75,50,25,18};
         public Color[] LevelColors = { Color.LightBlue, Color.LightGreen, Color.LightGoldenrodYellow, Color.Black, Color.White, Color.Orange, Color.Blue, Color.DarkCyan , Color.DarkRed, Color.DarkSalmon};
-        public int level = 1;
+
+        public int level = 0;
         public static float Score = 0;  
         public bool UsedHold = false;
         public Game1() 
@@ -103,55 +104,37 @@ namespace Tetris
         double gameTimer = 0;
         double gameOverTimer = 0;
         float groundMoveTimer = 300f;
-        protected override void Update(GameTime gameTime)
-        {
+
+        protected override void Update(GameTime gameTime) {
+
+            oldkstate = kstate;
+            kstate = Keyboard.GetState();
+
+            switch (gamestate)
             {
-                falltimer += gameTime.ElapsedGameTime.Milliseconds;
-                gameTimer += gameTime.ElapsedGameTime.Milliseconds;
-                oldkstate = kstate;
-                kstate = Keyboard.GetState();
-                level = MathHelper.Clamp((int)(Score / 1000), 0, LevelSpeeds.Length - 1);
+                case GameState.GameOver:
+                    gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
+                    blockRender.camOffset = Vector2.Zero;
+                    blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
+                    break;
+                case GameState.Menu:
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
+                        gamestate = GameState.Game;
+                    break;
+                case GameState.Game:
+                    falltimer += gameTime.ElapsedGameTime.Milliseconds;
+                    gameTimer += gameTime.ElapsedGameTime.Milliseconds;
+                    level = MathHelper.Clamp((int)Math.Floor(Score / 1000), 0, LevelSpeeds.Length - 1);
 
 
-                if (gamestate == GameState.Menu)
-                { 
-                //    MouseState muis = Mouse.GetState();
-
-                //    curMousePos.X = muis.X;
-                //    curMousePos.Y = muis.Y;
-                   if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
-                  {
-                      gamestate = GameState.Game;
-                  }
-                //    if (curMousepos
-                } 
-
-                else if (gamestate == GameState.Game)
-                    {
                     if (Keyboard.GetState().IsKeyDown(Keys.L))    //Increase sound
-                    {
-
-
-
                         MediaPlayer.Volume += 0.005f;
 
-                    }
-
-
-
                     if (Keyboard.GetState().IsKeyDown(Keys.K))    //Decrease sound
-                    {
-
-
-
                         MediaPlayer.Volume -= 0.005f;
 
-                    }
-
-                    if (Keyboard.GetState().IsKeyDown(Keys.M))  //mute sound
-                    {
-                        MediaPlayer.Volume = (volume * 0);
-                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.M))    //mute sound
+                        MediaPlayer.Volume = 0;
 
 
 
@@ -160,7 +143,7 @@ namespace Tetris
                     {
                         if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
                         {
-                            
+
                             if (groundMoveTimer <= 0 || kstate.IsKeyDown(Keys.Down))
                             {
                                 Hitsound.Play();
@@ -182,7 +165,7 @@ namespace Tetris
                             }
                         }
                         else
-                        {   
+                        {
                             fallingBlock.pos.y -= 1;
                             falltimer = 0;
                         }
@@ -229,7 +212,7 @@ namespace Tetris
                         Xbalance += gameTime.ElapsedGameTime.Milliseconds;
                         if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x + 1, fallingBlock.pos.y)))
                         {
-                            
+
                             if (oldkstate.IsKeyDown(Keys.Right))
                             {
                                 inputtimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -255,7 +238,7 @@ namespace Tetris
 
                         if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x - 1, fallingBlock.pos.y)))
                         {
-                            
+
                             if (oldkstate.IsKeyDown(Keys.Left))
                             {
                                 inputtimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -307,84 +290,79 @@ namespace Tetris
                     if (shakeTimer > 0)
                         shakeTimer -= gameTime.ElapsedGameTime.Milliseconds;
 
-
-                    
-                }if (gamestate == GameState.GameOver)
-                    {
-                        gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
-                        blockRender.camOffset = Vector2.Zero;
-                        blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
-                    }
-                base.Update(gameTime);
+                    break;
             }
+            base.Update(gameTime);
         }
        
 
-        protected override void Draw(GameTime gameTime) 
+        protected override void Draw(GameTime gameTime) {
+
+            Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin();
+            switch (gamestate)
             {
-                
-            if (gamestate == GameState.Menu)
-            {
-                GraphicsDevice.Clear(Color.Black);
-                spriteBatch.Begin();
-                spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
-                spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
-               // spriteBatch.Draw(backgr, new Vector2 (10,10), Color.White);
-                spriteBatch.End();
-            }
-            if (gamestate == GameState.Game || gamestate== GameState.GameOver)
-            {
-                Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                case GameState.Menu:
 
-
-                GraphicsDevice.Clear(LevelColors[level]);
-                spriteBatch.Begin();
-                spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
-
-                spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
-                spriteBatch.DrawString(font, "Level: " + (level += 1), new Vector2(10, 50), Color.White);
-                spriteBatch.DrawString(font2, "Press C \nto hold", new Vector2(60, 110), Color.White);
-                spriteBatch.DrawString(font2, "Next", new Vector2(GraphicsDevice.Viewport.Width- 150, 130), Color.White);
-                spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width /2f)-170, GraphicsDevice.Viewport.Height-60), Color.White);
-                spriteBatch.End();
-
-
-                for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
-                {
-                    blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
-                }
-
-
-                for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
-
-                {
-                    for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
-                    {
-                        Cube curCube = Playingfield.GetCube(new GridPos(x, y));
-                        if (curCube.cubeType != Cube.CubeType.Empty)
-                            blockRender.DrawCube(model, x, y, 0, curCube.color);
-                        else if (y < Playingfield.grid.GetLength(1) - 4)
-                        {
-                            blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
-                        }
-
-                    }
-                }
-
-                    fallingBlock.Draw();
-                nextBlock.Draw();
-                ghostBlock.Draw();
-                if (savedBlock != null)
-                    savedBlock.Draw();
-                if (gamestate == GameState.GameOver)
-                {
-                    spriteBatch.Begin();
+                    spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
+                    spriteBatch.DrawString(font, "Press space to begin", new Vector2(50, 20), Color.White);
+                    spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
+                    break;
+                case GameState.Game:
+                    DrawGame(mainFrame);
+                    break;
+                case GameState.GameOver:
+                    DrawGame(mainFrame);
                     spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
                     spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
-                    spriteBatch.End();
-                }
-                base.Draw(gameTime);
+                    break;
+                case GameState.Paused:
+
+                    break;
             }
+            spriteBatch.End();
+            base.Draw(gameTime);
+        }
+
+        void DrawGame(Rectangle mainFrame) {
+            spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
+
+            spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
+            spriteBatch.DrawString(font, "Level: " + (level + 1), new Vector2(10, 50), Color.White);
+            spriteBatch.DrawString(font2, "Press C \nto hold", new Vector2(60, 110), Color.White);
+            spriteBatch.DrawString(font2, "Next", new Vector2(GraphicsDevice.Viewport.Width - 150, 130), Color.White);
+            spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 60), Color.White);
+
+            spriteBatch.End();
+            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+            {
+                blockRender.DrawCube(model, x, 0, 0, Color.Gray, 0);
+            }
+
+
+            for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
+
+            {
+                for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
+                {
+                    Cube curCube = Playingfield.GetCube(new GridPos(x, y));
+                    if (curCube.cubeType != Cube.CubeType.Empty)
+                        blockRender.DrawCube(model, x, y, 0, curCube.color);
+                    else if (y < Playingfield.grid.GetLength(1) - 4)
+                    {
+                        blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
+                    }
+
+                }
+            }
+
+            fallingBlock.Draw();
+            nextBlock.Draw();
+            ghostBlock.Draw();
+            if (savedBlock != null)
+                savedBlock.Draw();
+            spriteBatch.Begin();
         }
     }
 

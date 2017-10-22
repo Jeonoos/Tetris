@@ -8,7 +8,7 @@ namespace Tetris
 {
     public static class Playingfield
     {
-        public static int xSize = 10, ySize = 25 ;
+        public static int xSize = 10, ySize = 27 ;
         public static Cube[,] grid = new Cube[xSize, ySize];
 
         public static Cube GetCube(GridPos pos) {
