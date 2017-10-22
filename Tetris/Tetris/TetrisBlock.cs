@@ -17,7 +17,7 @@ namespace Tetris
             {
             this.type = type;
             switch (type)
-            {
+            {                                                                                                                                       //Verschillende tetrisblokken met verschillende kleuren
                 case 0: shape = new bool[,] { { false, true, true }, { false, true, false }, { false, true, false } }; color = Color.Red; break;
                 case 1: shape = new bool[,] { { true, true, false }, { false, true, false }, { false, true, false } }; color = Color.Orange; break;
                 case 2: shape = new bool[,] { { false, true, false }, { true, true, false }, { true, false, false } }; color = Color.Purple; break;

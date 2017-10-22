@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Tetris gamemade by Alperen Elver 6321461  and Jeroen Vreugdenhil 6211046
+
+//All Loaded Content is Original content, except Backgr.png "https://static1.squarespace.com/static/51be3e56e4b09edc5f81e74c/t/54ab723fe4b01142027aaba0/1420522056098/?format=750w"
+
+
+
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -55,7 +62,7 @@ namespace Tetris
 
         }
 
-        protected override void Initialize() 
+        protected override void Initialize()                                                                //Initialize
             {
             Score = 0;
             falltimer = 0;
@@ -95,7 +102,7 @@ namespace Tetris
         }
         public float volume = 0.2f;
   
-        protected override void LoadContent() 
+        protected override void LoadContent()                                                               //LoadContent                                      
             {
 
             font = Content.Load<SpriteFont>("Score");
@@ -130,7 +137,7 @@ namespace Tetris
 
 
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)                                                                   //Update
         {
 
             oldkstate = kstate;
@@ -345,7 +352,7 @@ namespace Tetris
         }
        
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)                                                                            //Draw
         {
 
             Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
@@ -360,21 +367,28 @@ namespace Tetris
                     spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
 
+<<<<<<< HEAD
                     spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
                     spriteBatch.DrawString(smallText, "Press M to mute music", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 140), Color.White);
 
 
                     break;
+
                 case GameState.Game:
                     DrawGame(mainFrame);
+
                     break;
+
                 case GameState.GameOver:
+
                     DrawGame(mainFrame);
                     spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
                     spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
                     spriteBatch.DrawString(smallText, "press space to restart \n\n  esc to return to menu", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 200, GraphicsDevice.Viewport.Height / 2 + 70), Color.White);
+
                     break;
+
                 case GameState.Paused:
                     spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
                     spriteBatch.DrawString(font, "Paused", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 80, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
