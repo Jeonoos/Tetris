@@ -21,9 +21,9 @@ namespace Tetris
         TetrisBlock fallingBlock;
         PreviewTetrisBlock savedBlock;
         GhostBlock ghostBlock;
-        SpriteFont font, font2;
+        SpriteFont font, font2, smallText;
         
-        public static Model model,modeltransp ,backgroundmodel ,emptycube ,cage;
+        public static Model model,modeltransp ,backgroundmodel ,emptycube;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
         public static GameState gamestate = GameState.Menu;
         public enum GameState { Game, GameOver, Menu}
@@ -69,13 +69,13 @@ namespace Tetris
             {
             font = Content.Load<SpriteFont>("Score");
             font2 = Content.Load<SpriteFont>("Score2");
+            smallText = Content.Load<SpriteFont>("SmallText");
+
             backgr = Content.Load <Texture2D>("Backgr");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
-            cage = Content.Load<Model>("cage");
             monotex = Content.Load<Texture2D>("_original"); 
             modeltransp = Content.Load<Model>("monocubetransp");
-            backgroundmodel = Content.Load<Model>("Background");
             emptycube = Content.Load<Model>("EmptyCube");
             monotex = Content.Load<Texture2D>("monotex");
             playbutton = Content.Load<Texture2D>("playbutton");
@@ -338,12 +338,9 @@ namespace Tetris
 
 
                 GraphicsDevice.Clear(LevelColors[level]);
-                blockRender.DrawCube(backgroundmodel, 0, 0, -20, Color.White);
                 spriteBatch.Begin();
                 spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
-                spriteBatch.End();
 
-                spriteBatch.Begin();
                 spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Level: " + (level += 1), new Vector2(10, 50), Color.White);
                 spriteBatch.DrawString(font2, "Press C \nto hold", new Vector2(60, 110), Color.White);
@@ -373,19 +370,19 @@ namespace Tetris
 
                     }
                 }
-                if (gamestate == GameState.GameOver)
-                {
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
-                    spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height/2 - 20), Color.White);
-                    spriteBatch.End();
-                }
+
                     fallingBlock.Draw();
                 nextBlock.Draw();
                 ghostBlock.Draw();
                 if (savedBlock != null)
                     savedBlock.Draw();
-
+                if (gamestate == GameState.GameOver)
+                {
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
+                    spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
+                    spriteBatch.End();
+                }
                 base.Draw(gameTime);
             }
         }
