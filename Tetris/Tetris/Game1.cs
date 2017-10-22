@@ -320,6 +320,7 @@ namespace Tetris
 
         protected override void Draw(GameTime gameTime) 
             {
+                
             if (gamestate == GameState.Menu)
             {
                 GraphicsDevice.Clear(Color.Black);
@@ -344,8 +345,10 @@ namespace Tetris
                 spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Level: " + (level += 1), new Vector2(10, 50), Color.White);
                 spriteBatch.DrawString(font2, "Press C \nto hold", new Vector2(60, 110), Color.White);
+                spriteBatch.DrawString(font2, "Next", new Vector2(GraphicsDevice.Viewport.Width- 150, 130), Color.White);
                 spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width /2f)-170, GraphicsDevice.Viewport.Height-60), Color.White);
                 spriteBatch.End();
+
 
                 for (int x = 1; x < Playingfield.grid.GetLength(0); x++)
                 {
@@ -368,7 +371,13 @@ namespace Tetris
 
                     }
                 }
-                fallingBlock.Draw();
+                if (gamestate == GameState.GameOver)
+                {
+                    spriteBatch.Begin();
+                    spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height/2 - 20), Color.White);
+                    spriteBatch.End();
+                }
+                    fallingBlock.Draw();
                 nextBlock.Draw();
                 ghostBlock.Draw();
                 if (savedBlock != null)
