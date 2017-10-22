@@ -149,3 +149,9 @@
 /processorParam:Quality=Best
 /build:Clear.wav
 
+#begin Score2.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Score2.spritefont
+

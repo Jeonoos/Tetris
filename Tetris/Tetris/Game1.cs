@@ -21,7 +21,7 @@ namespace Tetris
         TetrisBlock fallingBlock;
         PreviewTetrisBlock savedBlock;
         GhostBlock ghostBlock;
-        SpriteFont font;
+        SpriteFont font, font2;
         
         public static Model model,modeltransp ,backgroundmodel ,emptycube ,cage;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
@@ -68,6 +68,7 @@ namespace Tetris
         protected override void LoadContent() 
             {
             font = Content.Load<SpriteFont>("Score");
+            font2 = Content.Load<SpriteFont>("Score2");
             backgr = Content.Load <Texture2D>("Backgr");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
@@ -342,6 +343,7 @@ namespace Tetris
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Level: " + (level += 1), new Vector2(10, 50), Color.White);
+                spriteBatch.DrawString(font2, "Press C \nto hold", new Vector2(60, 110), Color.White);
                 spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width /2f)-170, GraphicsDevice.Viewport.Height-60), Color.White);
                 spriteBatch.End();
 
