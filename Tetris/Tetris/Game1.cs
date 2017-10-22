@@ -18,7 +18,7 @@ namespace Tetris
     public class Game1 : Game
     {
         Song TetrisSong;
-        public static SoundEffect Hitsound, Clearsound, GameOver;
+        public static SoundEffect Hitsound, Clearsound;
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -151,7 +151,7 @@ namespace Tetris
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
                         gamestate = GameState.Game;
                     break;
-                case GameState.GameOver:
+                    case GameState.GameOver:
 
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !oldkstate.IsKeyDown(Keys.Escape))
                         gamestate = GameState.Menu;
@@ -161,11 +161,17 @@ namespace Tetris
                         gamestate = GameState.Game;
                     }
 
+
                     gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
                     blockRender.camOffset = Vector2.Zero;
                     blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
                     break;
                 case GameState.Menu:
+                    case GameState.Menu:                                                    // Alles wat tijdens "Menu" gebeurt
+                   
+                    
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))          // Spatie 
+                        gamestate = GameState.Game;
                     if (Keyboard.GetState().IsKeyDown(Keys.Escape) && !oldkstate.IsKeyDown(Keys.Escape))
                     {
                         Exit();
@@ -176,6 +182,7 @@ namespace Tetris
                         Initialize();
                         gamestate = GameState.Game;
                     }
+
                     break;
                 case GameState.Game:
                     falltimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -367,6 +374,9 @@ namespace Tetris
                     spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
                     
+
+                    spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
+                    spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
                     spriteBatch.DrawString(smallText, "Press M to mute music", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 170, GraphicsDevice.Viewport.Height - 140), Color.White);
 
 
