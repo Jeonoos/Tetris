@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Tetris gamemade by Alperen Elver 6321461  and Jeroen Vreugdenhil 6211046
+
+//All Loaded Content is Original content, except Backgr.png "https://static1.squarespace.com/static/51be3e56e4b09edc5f81e74c/t/54ab723fe4b01142027aaba0/1420522056098/?format=750w"
+
+
+
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -45,7 +52,7 @@ namespace Tetris
 
         }
 
-        protected override void Initialize() 
+        protected override void Initialize()                                                                //Initialize
             {
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -80,7 +87,7 @@ namespace Tetris
         }
         public float volume = 0.2f;
   
-        protected override void LoadContent()                                                   
+        protected override void LoadContent()                                                               //LoadContent                                      
             {
 
             font = Content.Load<SpriteFont>("Score");
@@ -123,7 +130,7 @@ namespace Tetris
         double gameOverTimer = 0;
         bool BreakFalling = false;
 
-        protected override void Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)                                                                   //Update
         {
 
             oldkstate = kstate;
@@ -317,7 +324,7 @@ namespace Tetris
         }
        
 
-        protected override void Draw(GameTime gameTime)
+        protected override void Draw(GameTime gameTime)                                                                            //Draw
         {
 
             Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
@@ -341,6 +348,7 @@ namespace Tetris
                     DrawGame(mainFrame);
 
                     break;
+
                 case GameState.GameOver:
 
                     DrawGame(mainFrame);
@@ -348,6 +356,7 @@ namespace Tetris
                     spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height / 2 - 20), Color.White);
 
                     break;
+
                 case GameState.Paused:
 
                     break;
@@ -393,7 +402,7 @@ namespace Tetris
             nextBlock.Draw();
             ghostBlock.Draw();
             if (savedBlock != null)
-                savedBlock.Draw();
+            savedBlock.Draw();
             spriteBatch.Begin();
         }
     }
