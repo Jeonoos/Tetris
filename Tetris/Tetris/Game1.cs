@@ -327,15 +327,15 @@ namespace Tetris
             {
                 case GameState.Menu:
 
-<<<<<<< HEAD
+
                     spriteBatch.Draw(Introscherm,new Vector2((GraphicsDevice.Viewport.Width / 2) - (Introscherm.Width / 2), (GraphicsDevice.Viewport.Height / 4) - (Introscherm.Height / 2)), Color.White);
                     spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
-=======
+
                     spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
                     spriteBatch.DrawString(smallText, "Press space to begin", new Vector2(50, 60), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
->>>>>>> 58df05e2700ae6d6794f92002934a9f3b6672ce6
+
                     break;
                 case GameState.Game:
                     DrawGame(mainFrame);
