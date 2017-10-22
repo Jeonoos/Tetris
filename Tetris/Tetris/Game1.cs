@@ -11,7 +11,7 @@ namespace Tetris
     public class Game1 : Game
     {
         Song TetrisSong;
-        SoundEffect Hit, Clear, GameOver;
+        public static SoundEffect Hitsound, Clearsound, GameOver;
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -23,14 +23,11 @@ namespace Tetris
         GhostBlock ghostBlock;
         SpriteFont font;
         
-        public static Model model;
-        public static Model modeltransp;
-        public static Model backgroundmodel;
-        public static Model emptycube;
+        public static Model model,modeltransp ,backgroundmodel ,emptycube ,cage;
         public float falltimer = 0, inputtimer = 0 , shakeTimer;
         public static GameState gamestate = GameState.Menu;
         public enum GameState { Game, GameOver, Menu}
-        public float[] LevelSpeeds = {600,400,300,200,150,100,75,50,25,10};
+        public float[] LevelSpeeds = {500,400,300,200,150,100,75,50,25,18};
         public Color[] LevelColors = { Color.LightBlue, Color.LightGreen, Color.LightGoldenrodYellow, Color.Black, Color.White, Color.Orange, Color.Blue, Color.DarkCyan , Color.DarkRed, Color.DarkSalmon};
         public int level = 1;
         public static float Score = 0;  
@@ -66,7 +63,7 @@ namespace Tetris
             ghostBlock = new GhostBlock(fallingBlock.type, fallingBlock.pos, fallingBlock.shape);
             nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
             savedBlock = null;
-        }
+        }public float volume = 0.2f;
   
         protected override void LoadContent() 
             {
@@ -74,13 +71,19 @@ namespace Tetris
             backgr = Content.Load <Texture2D>("Backgr");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
+           // cage = Content.Load<Model>("cage");
+           // monotex = Content.Load<Texture2D>("_original"); 
             modeltransp = Content.Load<Model>("monocubetransp");
             backgroundmodel = Content.Load<Model>("Background");
             emptycube = Content.Load<Model>("EmptyCube");
             monotex = Content.Load<Texture2D>("monotex");
             playbutton = Content.Load<Texture2D>("playbutton");
             TetrisSong = Content.Load<Song>("Tetris");
+            Hitsound = Content.Load<SoundEffect>("Hit");
+            Clearsound = Content.Load<SoundEffect>("Clear");
+            
             MediaPlayer.Play(TetrisSong);
+            MediaPlayer.Volume = (volume);
             MediaPlayer.IsRepeating = true;
         }
 
@@ -108,23 +111,56 @@ namespace Tetris
 
 
                 if (gamestate == GameState.Menu)
-                {
+                { 
+                //    MouseState muis = Mouse.GetState();
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
-                    {
-                        gamestate = GameState.Game;
-                    }
-                }
+                //    curMousePos.X = muis.X;
+                //    curMousePos.Y = muis.Y;
+                   if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
+                  {
+                      gamestate = GameState.Game;
+                  }
+                //    if (curMousepos
+                } 
 
                 else if (gamestate == GameState.Game)
                     {
+                    if (Keyboard.GetState().IsKeyDown(Keys.L))    //Increase sound
+                    {
+
+
+
+                        MediaPlayer.Volume += 0.005f;
+
+                    }
+
+
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.K))    //Decrease sound
+                    {
+
+
+
+                        MediaPlayer.Volume -= 0.005f;
+
+                    }
+
+                    if (Keyboard.GetState().IsKeyDown(Keys.M))  //mute sound
+                    {
+                        MediaPlayer.Volume = (volume * 0);
+                    }
+
+
+
                     ghostBlock = new GhostBlock(fallingBlock.type, fallingBlock.pos, fallingBlock.shape);
                     if (falltimer > LevelSpeeds[level])
                     {
                         if (fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x, fallingBlock.pos.y - 1)))
                         {
+                            
                             if (groundMoveTimer <= 0 || kstate.IsKeyDown(Keys.Down))
                             {
+                                Hitsound.Play();
                                 groundMoveTimer = 300f;
                                 fallingBlock.Solidify();
                                 Playingfield.CheckForRow();
@@ -143,7 +179,7 @@ namespace Tetris
                             }
                         }
                         else
-                        {
+                        {   
                             fallingBlock.pos.y -= 1;
                             falltimer = 0;
                         }
@@ -190,6 +226,7 @@ namespace Tetris
                         Xbalance += gameTime.ElapsedGameTime.Milliseconds;
                         if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x + 1, fallingBlock.pos.y)))
                         {
+                            
                             if (oldkstate.IsKeyDown(Keys.Right))
                             {
                                 inputtimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -215,6 +252,7 @@ namespace Tetris
 
                         if (!fallingBlock.CheckCollision(new GridPos(fallingBlock.pos.x - 1, fallingBlock.pos.y)))
                         {
+                            
                             if (oldkstate.IsKeyDown(Keys.Left))
                             {
                                 inputtimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -258,8 +296,8 @@ namespace Tetris
                     if (BreakFalling && !kstate.IsKeyDown(Keys.Down))
                         BreakFalling = false;
 
-                    Xbalance = MathHelper.Clamp(Xbalance, -200, 200);
-                    Ybalance = MathHelper.Clamp(Ybalance, 0, 200);
+                    Xbalance = MathHelper.Clamp(Xbalance, -80, 80);
+                    Ybalance = MathHelper.Clamp(Ybalance, 0, 80);
                     blockRender.camOffset.X = -Xbalance / 20;
                     blockRender.camOffset.Y = Ybalance / 20;
                     blockRender.camOffset.X += (float)Math.Sin(shakeTimer / 60 * Math.PI) * shakeTimer / 20;
@@ -292,17 +330,19 @@ namespace Tetris
             }
             if (gamestate == GameState.Game || gamestate== GameState.GameOver)
             {
-                
-          
+                Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+
                 GraphicsDevice.Clear(LevelColors[level]);
                 blockRender.DrawCube(backgroundmodel, 0, 0, -20, Color.White);
                 spriteBatch.Begin();
-                spriteBatch.Draw(backgr,Vector2.Zero, LevelColors[level]);
+                spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
                 spriteBatch.End();
 
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
                 spriteBatch.DrawString(font, "Level: " + (level += 1), new Vector2(10, 50), Color.White);
+                spriteBatch.DrawString(font, "Press M to mute ", new Vector2((GraphicsDevice.Viewport.Width /2f)-170, GraphicsDevice.Viewport.Height-60), Color.White);
                 spriteBatch.End();
 
                 for (int x = 1; x < Playingfield.grid.GetLength(0); x++)

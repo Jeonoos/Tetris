@@ -137,3 +137,15 @@
 /processorParam:TextureFormat=Color
 /build:playbutton.png
 
+#begin Hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Hit.wav
+
+#begin Clear.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Clear.wav
+

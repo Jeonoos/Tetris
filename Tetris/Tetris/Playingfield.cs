@@ -28,6 +28,7 @@ namespace Tetris
                 }
                 if (completeRow == true)
                 {
+                    Game1.Clearsound.Play();
                     Game1.Score += 100;
                     for (int x = 1; x < xSize; x++)
                     {
