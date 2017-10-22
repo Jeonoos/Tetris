@@ -18,7 +18,7 @@ namespace Tetris
     public class Game1 : Game
     {
         Song TetrisSong;
-        public static SoundEffect Hitsound, Clearsound, GameOver;
+        public static SoundEffect Hitsound, Clearsound;
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -138,16 +138,19 @@ namespace Tetris
 
             switch (gamestate)
             {
-                case GameState.GameOver:
+                case GameState.GameOver:                                                //Alles wat tijdens "GameOver" gebeurt
+
                     gameOverTimer += gameTime.ElapsedGameTime.Milliseconds * 0.5f;
                     blockRender.camOffset = Vector2.Zero;
                     blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
                     break;
-                case GameState.Menu:
+
+                case GameState.Menu:                                                    // Alles wat tijdens "Menu" gebeurt
                    
                     
-                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
+                    if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))          // Spatie 
                         gamestate = GameState.Game;
+
                     break;
                 case GameState.Game:
                     falltimer += gameTime.ElapsedGameTime.Milliseconds;
