@@ -15,7 +15,7 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D monotex, backgr, playbutton;
+        Texture2D monotex, backgr, playbutton, Gameoverdim;
         public static BlockRender blockRender;
         PreviewTetrisBlock nextBlock;
         TetrisBlock fallingBlock;
@@ -82,7 +82,9 @@ namespace Tetris
             TetrisSong = Content.Load<Song>("Tetris");
             Hitsound = Content.Load<SoundEffect>("Hit");
             Clearsound = Content.Load<SoundEffect>("Clear");
-            
+            Gameoverdim = Content.Load<Texture2D>("Gameoverdim");
+
+
             MediaPlayer.Play(TetrisSong);
             MediaPlayer.Volume = (volume);
             MediaPlayer.IsRepeating = true;
@@ -374,6 +376,7 @@ namespace Tetris
                 if (gamestate == GameState.GameOver)
                 {
                     spriteBatch.Begin();
+                    spriteBatch.Draw(Gameoverdim, mainFrame, Color.Black);
                     spriteBatch.DrawString(font, "Game Over", new Vector2((GraphicsDevice.Viewport.Width / 2f) - 90, GraphicsDevice.Viewport.Height/2 - 20), Color.White);
                     spriteBatch.End();
                 }
