@@ -15,11 +15,10 @@ namespace Tetris
         public static Random random;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D monotex, backgr, playbutton, Gameoverdim;
+        Texture2D monotex, backgr, playbutton, Gameoverdim, StartGame, Introscherm;
         public static BlockRender blockRender;
-        PreviewTetrisBlock nextBlock;
+        PreviewTetrisBlock nextBlock, savedBlock;
         TetrisBlock fallingBlock;
-        PreviewTetrisBlock savedBlock;
         GhostBlock ghostBlock;
         SpriteFont font, font2, smallText;
         
@@ -33,6 +32,7 @@ namespace Tetris
         public int level = 0;
         public static float Score = 0;  
         public bool UsedHold = false;
+
         public Game1() 
             {
 
@@ -49,63 +49,82 @@ namespace Tetris
             {
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             base.Initialize();
+
             random = new Random();
+
             for (int x = 0; x < Playingfield.grid.GetLength(0); x++)
             {
+
                 for (int y = 0; y < Playingfield.grid.GetLength(1); y++)
+
                 {
+
                     Playingfield.grid[x, y] = new Cube(Cube.CubeType.Empty,Color.White);
+
                 }
+
             }
 
             nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
+
             fallingBlock = new TetrisBlock(nextBlock.type);
+
             ghostBlock = new GhostBlock(fallingBlock.type, fallingBlock.pos, fallingBlock.shape);
+
             nextBlock = new PreviewTetrisBlock(Game1.random.Next(0, 7));
+
             savedBlock = null;
-        }public float volume = 0.2f;
+
+        }
+        public float volume = 0.2f;
   
         protected override void LoadContent() 
             {
+
             font = Content.Load<SpriteFont>("Score");
             font2 = Content.Load<SpriteFont>("Score2");
             smallText = Content.Load<SpriteFont>("SmallText");
 
             backgr = Content.Load <Texture2D>("Backgr");
-            blockRender = new BlockRender(graphics);
-            model = Content.Load<Model>("monocube");
-            monotex = Content.Load<Texture2D>("_original"); 
-            modeltransp = Content.Load<Model>("monocubetransp");
-            emptycube = Content.Load<Model>("EmptyCube");
+            StartGame = Content.Load<Texture2D>("startGame");
+            Gameoverdim = Content.Load<Texture2D>("Gameoverdim");
             monotex = Content.Load<Texture2D>("monotex");
-            playbutton = Content.Load<Texture2D>("playbutton");
+            playbutton =  Content.Load<Texture2D>("playbutton");
+            Introscherm = Content.Load<Texture2D>("Introscherm");
+
             TetrisSong = Content.Load<Song>("Tetris");
             Hitsound = Content.Load<SoundEffect>("Hit");
             Clearsound = Content.Load<SoundEffect>("Clear");
-            Gameoverdim = Content.Load<Texture2D>("Gameoverdim");
 
+            emptycube = Content.Load<Model>("EmptyCube");
+            model = Content.Load<Model>("monocube");
+            modeltransp = Content.Load<Model>("monocubetransp");
+            blockRender = new BlockRender(graphics);
 
             MediaPlayer.Play(TetrisSong);
             MediaPlayer.Volume = (volume);
             MediaPlayer.IsRepeating = true;
-        }
+            }
 
       
         protected override void UnloadContent() 
             {
-            
-        }
+            }
+
+
         KeyboardState kstate = Keyboard.GetState();
         KeyboardState oldkstate;
         float Xbalance = 0;
         float Ybalance = 0;
-        bool BreakFalling = false;
+        float groundMoveTimer = 300f;
         double gameTimer = 0;
         double gameOverTimer = 0;
-        float groundMoveTimer = 300f;
+        bool BreakFalling = false;
 
-        protected override void Update(GameTime gameTime) {
+        protected override void Update(GameTime gameTime)
+        {
 
             oldkstate = kstate;
             kstate = Keyboard.GetState();
@@ -118,6 +137,8 @@ namespace Tetris
                     blockRender.camPosition = new Vector3((float)Math.Sin(gameOverTimer / 1000) * 75 + blockRender.camTarget.X, blockRender.camPosition.Y, (float)Math.Cos(gameOverTimer / 1000) * 75 + blockRender.camTarget.Z);
                     break;
                 case GameState.Menu:
+                   
+                    
                     if (Keyboard.GetState().IsKeyDown(Keys.Space) && !oldkstate.IsKeyDown(Keys.Space))
                         gamestate = GameState.Game;
                     break;
@@ -296,7 +317,8 @@ namespace Tetris
         }
        
 
-        protected override void Draw(GameTime gameTime) {
+        protected override void Draw(GameTime gameTime)
+        {
 
             Rectangle mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
             GraphicsDevice.Clear(Color.Black);
@@ -305,9 +327,15 @@ namespace Tetris
             {
                 case GameState.Menu:
 
+
+                    spriteBatch.Draw(Introscherm,new Vector2((GraphicsDevice.Viewport.Width / 2) - (Introscherm.Width / 2), (GraphicsDevice.Viewport.Height / 4) - (Introscherm.Height / 2)), Color.White);
+                    spriteBatch.Draw(StartGame, new Vector2((GraphicsDevice.Viewport.Width / 2) - (StartGame.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (StartGame.Height / 2)), Color.White);
+                    spriteBatch.Draw(playbutton, new Vector2((GraphicsDevice.Viewport.Width / 2) - (playbutton.Width / 2), (GraphicsDevice.Viewport.Height / 2) - (playbutton.Height / 2)+ StartGame.Height), Color.White);
+
                     spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
                     spriteBatch.DrawString(smallText, "Press space to begin", new Vector2(50, 60), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
+
                     break;
                 case GameState.Game:
                     DrawGame(mainFrame);
@@ -325,7 +353,8 @@ namespace Tetris
             base.Draw(gameTime);
         }
 
-        void DrawGame(Rectangle mainFrame) {
+        void DrawGame(Rectangle mainFrame)
+        {
             spriteBatch.Draw(backgr, mainFrame, LevelColors[level]);
 
             spriteBatch.DrawString(font, "Score: " + Score, new Vector2(10, 10), Color.White);
