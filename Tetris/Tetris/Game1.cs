@@ -72,8 +72,8 @@ namespace Tetris
             backgr = Content.Load <Texture2D>("Backgr");
             blockRender = new BlockRender(graphics);
             model = Content.Load<Model>("monocube");
-           // cage = Content.Load<Model>("cage");
-           // monotex = Content.Load<Texture2D>("_original"); 
+            cage = Content.Load<Model>("cage");
+            monotex = Content.Load<Texture2D>("_original"); 
             modeltransp = Content.Load<Model>("monocubetransp");
             backgroundmodel = Content.Load<Model>("Background");
             emptycube = Content.Load<Model>("EmptyCube");
