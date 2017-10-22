@@ -306,7 +306,7 @@ namespace Tetris
                 case GameState.Menu:
 
                     spriteBatch.DrawString(font, "Welcome to Tetris", new Vector2(50, 20), Color.White);
-                    spriteBatch.DrawString(font, "Press space to begin", new Vector2(50, 20), Color.White);
+                    spriteBatch.DrawString(smallText, "Press space to begin", new Vector2(50, 60), Color.White);
                     spriteBatch.Draw(playbutton, new Vector2(360, 550), Color.White);
                     break;
                 case GameState.Game:
@@ -349,7 +349,7 @@ namespace Tetris
                     Cube curCube = Playingfield.GetCube(new GridPos(x, y));
                     if (curCube.cubeType != Cube.CubeType.Empty)
                         blockRender.DrawCube(model, x, y, 0, curCube.color);
-                    else if (y < Playingfield.grid.GetLength(1) - 4)
+                    else if (y <= Playingfield.actualHeight)
                     {
                         blockRender.DrawCube(modeltransp, x, y, 0, Color.White, 0.9f);
                     }
