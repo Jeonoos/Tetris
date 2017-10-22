@@ -22,7 +22,7 @@ namespace Tetris
         {
 
             
-            camTarget = new Vector3(10f, 20f, 0f);
+            camTarget = new Vector3(11f, 20f, 0f);
             camPosition = new Vector3(10f, 20f, 75f);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45f), graphics.GraphicsDevice.Viewport.AspectRatio, 1f, 1000f);
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f));
